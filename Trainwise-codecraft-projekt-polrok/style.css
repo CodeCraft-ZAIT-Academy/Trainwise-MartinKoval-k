@@ -9,7 +9,8 @@
     display: flex;
     justify-content: space-between; 
     align-items: center; 
-    border-bottom: 8px solid #FFD700; 
+    border-bottom: 8px solid #FFD700;
+    position: relative; 
 }
 /* Ľavá ikona v headery */
 .hamburger-menu {
@@ -32,7 +33,7 @@
 .header-right {
     display: flex;
     align-items: center;
-    gap: 32px; 
+    gap: 20px; 
 }
 
 /* navigačné tlačidlá (AboutUs, home, app) */
@@ -49,4 +50,18 @@
 /* hover efekt pre navigačné tlačidlá */
 .nav-btn:hover {
     background-color: #ddd; 
+} 
+
+.header-logo {
+    height: 80px; 
+    width: auto;  
+    display: block;
+}
+
+.header-center {
+    position: absolute;       
+    left: 50%;                
+    transform: translateX(-50%); 
+    
+   
 }

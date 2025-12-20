@@ -1,0 +1,52 @@
+
+
+
+
+/* Header */
+.header {
+    background-color: black;
+    height: 80px; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 8px solid #FFD700; 
+}
+/* Ľavá ikona v headery */
+.hamburger-menu {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+}
+
+.hamburger-menu span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: white; 
+}
+
+/*  Pravá strana: Tlačidlá  */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 32px; 
+}
+
+/* navigačné tlačidlá (AboutUs, home, app) */
+.nav-btn {
+    background-color: white;
+    color: black;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 20px; 
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+/* hover efekt pre navigačné tlačidlá */
+.nav-btn:hover {
+    background-color: #ddd; 
+}

@@ -219,12 +219,13 @@ html, body {
 footer {
     position: relative; 
     height: auto;      
-    background-color: #FFD700; 
+    background: linear-gradient(90deg, #B8860B 0%, #FFD700 50%, #B8860B 100%);
     color: black;      
     text-align: left;  
     padding: 30px 50px; 
     font-weight: bold;
     border-top: none;  
+    height: 115px;
 }
 
 /*  KOŠÍK BUTTON  */
@@ -433,3 +434,4 @@ footer {
         display: none !important; 
     }
 }
+

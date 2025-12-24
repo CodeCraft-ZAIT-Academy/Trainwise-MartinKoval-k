@@ -424,4 +424,12 @@ footer {
 }
 
 
+/* ========================================= */
+/* ---  SKRYTIE HAMBURGERA NA PC  */
+/* ========================================= */
 
+@media (min-width: 769px) {
+    .hamburger-menu {
+        display: none !important; 
+    }
+}

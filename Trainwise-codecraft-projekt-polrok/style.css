@@ -544,3 +544,27 @@ html, body {
     }
 }
 
+
+.footer-brand {
+    display: flex;          
+    align-items: center;   
+    gap: 0px;              
+    margin-bottom: 20px;   
+}
+
+
+.footer-logo {
+    margin-bottom: 0;      
+    height: 50x;          
+    width: auto;
+   margin-right: -50px;
+}
+
+
+.brand-text {
+    font-size: 24px;        
+    font-weight: 900;       
+    text-transform: uppercase;
+    letter-spacing: 1px;   
+    color: black;
+}

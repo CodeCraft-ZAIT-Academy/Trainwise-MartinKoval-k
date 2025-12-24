@@ -218,26 +218,26 @@ html, body {
 /*  FOOTER  */
 .footer {
     position: relative;
-    background: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%); /* Tracked.gg gradient */
-    box-shadow: 0 -10px 40px rgba(255, 215, 0, 0.15); /* Žiara nahor */
+    background: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%);
+    box-shadow: 0 -10px 40px rgba(255, 215, 0, 0.15); 
     color: black;
-    padding: 60px 20px 20px 20px; /* Viac miesta hore */
+    padding: 60px 20px 20px 20px; 
     font-size: 14px;
-    margin-top: auto; /* Aby bol vždy naspodku */
+    margin-top: auto; 
 }
 
-/* Hlavný kontajner pre obsah (Flexbox) */
+
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* Rozdelí ľavú a pravú stranu */
-    flex-wrap: wrap; /* Aby sa to na mobile zalamovalo */
+    justify-content: space-between; 
+    flex-wrap: wrap; 
     gap: 40px;
     margin-bottom: 40px;
 }
 
-/* Ľavá strana (Logo + Text) */
+
 .footer-left {
     flex: 1;
     min-width: 250px;
@@ -245,12 +245,12 @@ html, body {
 }
 
 .footer-logo {
-    height: 50px; /* Veľkosť loga vo footery */
+    height: 85px; 
     width: auto;
     margin-bottom: 20px;
     display: block;
-    /* Ak máš biele logo, tento filter ho spraví čiernym, aby pasovalo na žltú */
-    filter: brightness(0); 
+   
+    filter: brightness(1); 
 }
 
 .footer-desc {
@@ -259,12 +259,12 @@ html, body {
     font-weight: 500;
 }
 
-/* Pravá strana (Odkazy) */
+
 .footer-links {
     flex: 2;
     display: flex;
-    justify-content: flex-end; /* Zarovnanie doprava */
-    gap: 60px; /* Medzery medzi stĺpcami */
+    justify-content: flex-end; 
+    gap: 60px; 
     flex-wrap: wrap;
 }
 
@@ -272,7 +272,7 @@ html, body {
     font-size: 16px;
     text-transform: uppercase;
     margin-bottom: 20px;
-    border-bottom: 2px solid black; /* Malá čiara pod nadpisom */
+    border-bottom: 2px solid black; 
     display: inline-block;
     padding-bottom: 5px;
 }

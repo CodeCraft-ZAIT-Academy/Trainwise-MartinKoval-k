@@ -572,3 +572,53 @@ html, body {
     letter-spacing: 1px;   
     color: black;
 }
+
+
+.hero-button {
+    position: absolute; 
+    width: 100%;       
+    display: flex;
+    justify-content: center; 
+    bottom: 50px;      
+    left: 0;
+    z-index: 10;       
+}
+
+
+.hero-btn {
+    background-color: transparent; 
+    color: white;      
+    border: 2px solid white; 
+    
+    
+    padding: 8px 25px;  
+    font-size: 0.9rem; 
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    
+    
+    border-radius: 6px; 
+    
+    transition: all 0.3s ease;
+}
+
+
+.hero-btn:hover {
+    background-color: white; 
+    color: black;           
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); 
+    transform: translateY(-2px); 
+}
+
+/*  ÚPRAVA PRE MOBIL  */
+@media (max-width: 768px) {
+    .hero-button {
+        bottom: 30px; /* Na mobile trochu nižšie */
+    }
+    
+    .hero-btn {
+        padding: 6px 20px; /* Ešte menšie na mobile */
+        font-size: 0.8rem;
+    }
+}

@@ -550,6 +550,7 @@ html, body {
     align-items: center;   
     gap: 0px;              
     margin-bottom: 20px;   
+    margin-left: -56px;
 }
 
 
@@ -558,6 +559,9 @@ html, body {
     height: 50x;          
     width: auto;
    margin-right: -50px;
+   
+
+
 }
 
 

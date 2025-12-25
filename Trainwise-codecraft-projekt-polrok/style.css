@@ -192,10 +192,27 @@ html, body {
 
 .product-placeholder {
     width: 100%;
-    height: 180px;
-    background-color: #FFD700;
-    border-radius: 10px;
+    height: 205px;
+    background-color: #FFD700; 
+    border-radius: 15px;       
     margin-bottom: 25px;
+    
+    
+    padding: 5px;             
+    box-sizing: border-box;    
+    
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-img {
+    width: 100%;               
+    height: 100%;              
+    object-fit: cover;         
+    border-radius: 10px;       
+    display: block;
 }
 
 .price-btn {
@@ -316,17 +333,17 @@ html, body {
     }
 
     .footer-content {
-        flex-direction: column; /* Pod seba */
+        flex-direction: column; 
         gap: 30px;
     }
 
     .footer-links {
-        justify-content: flex-start; /* Zarovnanie doľava */
+        justify-content: flex-start; 
         gap: 30px;
-        flex-direction: column; /* Stĺpce pod seba (alebo row wrap pre 2 vedľa seba) */
+        flex-direction: column; 
     }
     
-    /* Ak chceš na mobile stĺpce vedľa seba (2 a 2), použi toto: */
+    
     .footer-links {
         flex-direction: row;
         justify-content: space-between;

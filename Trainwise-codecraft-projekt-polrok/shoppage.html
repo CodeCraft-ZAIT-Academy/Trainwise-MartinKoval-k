@@ -1,14 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shoppage Trainwise</title>
+    <title>Trainwise - Shop</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
 
+<body style="background-color: black;"> 
 
-    
+<div class="overlay" id="overlay"></div>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <button class="close-btn" id="close-btn">&times;</button>
+    </div>
+    <nav class="sidebar-links">
+        <a href="AboutUs.html">About Us</a>
+        <a href="shoppage.html">Shop</a>
+        <a href="Trainwise-app.html">App</a>
+        <a href="Login.html">Login</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+</div>
+
+<div class="main-wrapper">
+    <header class="header">
+        <div class="header-left">
+            <button class="hamburger-menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="header-center"> 
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
+        </div>
+        <div class="header-right">
+            <a href="AboutUs.html" class="nav-btn">AboutUs</a>
+            <a href="shoppage.html" class="nav-btn">shop</a>
+            <a href="Trainwise-app.html" class="nav-btn">app</a>
+            <a href="Login.html" class="nav-btn login-btn-with-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
+                </svg>
+                <span>Login</span>
+            </a>  
+            <a href="cart.html" class="nav-btn cart-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="shop-controls">
+            <h1 class="shop-title">ALL PLANS</h1>
+            
+            <div class="filters-wrapper">
+                <div class="filter-group">
+                    <label>Category:</label>
+                    <select id="category-select" onchange="filterAndSort()">
+                        <option value="all">All Plans</option>
+                        <option value="popular">Popular</option>
+                        <option value="beginner">Beginner Friendly</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Sort by:</label>
+                    <select id="price-select" onchange="filterAndSort()">
+                        <option value="default">Default</option>
+                        <option value="low-high">Price: Low to High</option>
+                        <option value="high-low">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <section class="products-grid" id="main-grid">
+            
+            <div class="product-card" data-category="popular advanced" data-price="39.99">
+                <h3>HYPERTROPHY</h3>
+                <div class="product-placeholder">
+                    <img src="images/hypertrophy.jpg" alt="Hypertrophy" class="product-img">
+                </div> 
+                <p>- Master Hypertrophy & Strength</p>
+                <button class="price-btn">39,99 €</button>
+            </div>
+
+            <div class="product-card" data-category="popular beginner" data-price="15.99">
+                <h3>GET SHREDDED</h3>
+                <div class="product-placeholder">
+                    <img src="images/getshredded.jpg" alt="Get Shredded" class="product-img">
+                </div>
+                <p>- Get shredded in less than 60 days</p>
+                <button class="price-btn">15,99 €</button>
+            </div>
+
+            <div class="product-card" data-category="popular advanced" data-price="25.99">
+                <h3>BIOMECHANICS</h3>
+                <div class="product-placeholder">
+                    <img src="images/biomechanics.jpg" alt="Biomechanics" class="product-img">
+                </div>
+                <p>- Learn complex biomechanics</p>
+                <button class="price-btn">25,99 €</button>
+            </div>
+
+            <div class="product-card" data-category="beginner" data-price="10.99">
+                <h3>CARDIOMAXXING</h3>
+                <div class="product-placeholder">
+                    <img src="images/cardio.jpg" alt="Cardio" class="product-img">
+                </div> 
+                <p>- Endurance and heart health basics</p>
+                <button class="price-btn">10,99 €</button>
+            </div>
+
+            <div class="product-card" data-category="beginner" data-price="29.99">
+                <h3>POWERBUILDING</h3>
+                <div class="product-placeholder">
+                    <img src="images/powerbuilding.jpg" alt="Powerbuilding" class="product-img">
+                </div>
+                <p>- Best of both worlds: Size & Strength</p>
+                <button class="price-btn">29,99 €</button>
+            </div>
+
+             <div class="product-card" data-category="advanced" data-price="45.99">
+                <h3>POWERLIFTING</h3>
+                <div class="product-placeholder">
+                    <img src="images/powerlifting.jpg" alt="Powerlifting" class="product-img">
+                </div> 
+                <p>- Pure strength focus for competition</p>
+                <button class="price-btn">45,99 €</button>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="Trainwise Logo" class="footer-logo">
+                    <span class="brand-text">TRAINWISE</span>
+                </div>
+                <p class="footer-desc">
+                    The free, maximalist lifting tracker for serious athletes and coaches.
+                </p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="Trainwise-app.html">Application</a></li>
+                        <li><a href="shoppage.html">Training Plans</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="AboutUs.html">About Us</a></li>
+                        <li><a href="#">Career</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Trainwise. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    //  SIDEBAR 
+    const hamburgerBtn = document.querySelector('.hamburger-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('close-btn');
+
+    if(hamburgerBtn){
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+        function closeMenu() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+    }
+
+    //  FILTROVANIE A ZORADENIE 
+    function filterAndSort() {
+        const categoryValue = document.getElementById('category-select').value;
+        const priceValue = document.getElementById('price-select').value;
+        const grid = document.getElementById('main-grid');
+        const cards = Array.from(grid.getElementsByClassName('product-card'));
+
+        // 1. FILTROVANIE (Ukázať/Skryť)
+        cards.forEach(card => {
+            const categories = card.dataset.category; 
+            
+           
+            if (categoryValue === 'all' || categories.includes(categoryValue)) {
+                card.style.display = 'flex'; // Zobraziť
+            } else {
+                card.style.display = 'none'; // Skryť
+            }
+        });
+
+        
+        
+        const visibleCards = cards.filter(c => c.style.display !== 'none');
+        
+        if (priceValue === 'low-high') {
+            cards.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+        } else if (priceValue === 'high-low') {
+            cards.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+        }
+        
+
+        // Prekreslenie mriežky v novom poradí
+        cards.forEach(card => grid.appendChild(card));
+        
+        // Zmena nadpisu podľa výberu
+        const title = document.querySelector('.shop-title');
+        if(categoryValue === 'all') title.innerText = "ALL PLANS";
+        else title.innerText = categoryValue.toUpperCase();
+    }
+</script>
+
 </body>
 </html>

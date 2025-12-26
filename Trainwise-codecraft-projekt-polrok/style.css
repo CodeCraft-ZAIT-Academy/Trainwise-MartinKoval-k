@@ -659,3 +659,97 @@ html, body {
     }
 }
 
+/* ========================================= */
+/* --- SHOP PAGE FILTERS --- */
+/* ========================================= */
+
+.shop-controls {
+    padding: 40px 20px 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.shop-title {
+    font-size: 2.5rem;
+    color: white;
+    margin: 0;
+    border-left: 5px solid #FFD700;
+    padding-left: 15px;
+    text-transform: uppercase;
+}
+
+.filters-wrapper {
+    display: flex;
+    gap: 20px; /* Medzera medzi dvoma filtrami */
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Štýl pre Select boxy */
+.shop-controls select {
+    background-color: black;
+    color: white;
+    border: 2px solid #FFD700;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+
+.shop-controls select option {
+    background-color: black;
+    color: white;
+}
+
+/* Hover efekt pre select */
+.shop-controls select:hover {
+    background-color: #1a1a1a;
+}
+
+/* Responsivita pre filtre na mobile */
+@media (max-width: 768px) {
+    .shop-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filters-wrapper {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+    
+    .filter-group {
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+
+
+
+#main-grid {
+    min-height: 1050px; 
+    align-content: flex-start;
+}
+
+
+@media (max-width: 768px) {
+    #main-grid {
+        min-height: auto;
+    }
+}

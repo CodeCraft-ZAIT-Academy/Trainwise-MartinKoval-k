@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainwise - Product Detail</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color: black;">
+
+    <div class="overlay" id="overlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-btn" id="close-btn">&times;</button>
+        </div>
+        <nav class="sidebar-links">
+            <a href="AboutUs.html">About Us</a>
+            <a href="shoppage.html">Shop</a>
+            <a href="Trainwise-app.html">App</a>
+            <a href="Login.html">Login</a>
+            <a href="cart.html">Cart</a>
+        </nav>
+    </div>
+
+    <div class="main-wrapper">
+        <header class="header">
+            <div class="header-left">
+                <button class="hamburger-menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <div class="header-center"> 
+                <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
+            </div>
+            <div class="header-right">
+                <a href="AboutUs.html" class="nav-btn">AboutUs</a>
+                <a href="shoppage.html" class="nav-btn">shop</a>
+                <a href="Trainwise-app.html" class="nav-btn">app</a>
+                <a href="Login.html" class="nav-btn login-btn-with-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
+                    </svg>
+                    <span>Login</span>
+                </a>  
+                <a href="cart.html" class="nav-btn cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    </svg>
+                </a>
+            </div>
+        </header>
+
+        <main class="content product-detail-wrapper">
+            
+            <a href="shoppage.html" class="back-link">← Back to Shop</a>
+
+            <div class="product-detail-container">
+                <div class="detail-left">
+                    <div class="detail-image-wrapper">
+                        <img src="" alt="Product Image" id="detail-img">
+                    </div>
+                </div>
+
+                <div class="detail-right">
+                    <h1 id="detail-title">LOADING...</h1>
+                    <p class="detail-price" id="detail-price">-- €</p>
+                    
+                    <hr class="detail-divider">
+
+                    <div class="detail-desc" id="detail-desc">
+                        <p>Loading description...</p>
+                    </div>
+
+                    <button class="add-to-cart-btn" id="add-to-cart-btn">ADD TO CART</button>
+                    
+                    <div class="features-list">
+                        <ul>
+                            <li>✅ Instant PDF Download</li>
+                            <li>✅ Mobile Friendly</li>
+                            <li>✅ 24/7 Support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-brand">
+                        <img src="images/logo.png" alt="Trainwise Logo" class="footer-logo">
+                        <span class="brand-text">TRAINWISE</span>
+                    </div>
+                    <p class="footer-desc">The free, maximalist lifting tracker for serious athletes and coaches.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="Trainwise-app.html">Application</a></li>
+                            <li><a href="shoppage.html">Training Plans</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Features</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="AboutUs.html">About Us</a></li>
+                            <li><a href="#">Career</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Terms of Use</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Cookies</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Trainwise. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 1. Sidebar logika (rovnaká)
+        const hamburgerBtn = document.querySelector('.hamburger-menu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('close-btn');
+
+        if(hamburgerBtn){
+            hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); });
+            function closeMenu() { sidebar.classList.remove('active'); overlay.classList.remove('active'); }
+            closeBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+        }
+
+        // 2. DATABÁZA PRODUKTOV 
+        const productsDatabase = {
+            "hypertrophy": {
+                title: "HYPERTROPHY PROGRAM",
+                price: "39,99 €",
+                image: "images/hypertrophy.jpg",
+                desc: "This program is designed for maximum muscle growth. Based on the latest scientific research, it combines volume and intensity to ensure you grow."
+            },
+            "getshredded": {
+                title: "GET SHREDDED",
+                price: "15,99 €",
+                image: "images/getshredded.jpg",
+                desc: "Lose fat while keeping your muscle. This 60-day plan focuses on high intensity interval training and calorie deficit management."
+            },
+            "biomechanics": {
+                title: "BIOMECHANICS MASTERCLASS",
+                price: "25,99 €",
+                image: "images/biomechanics.jpg",
+                desc: "Learn how to lift safely and efficiently. Understand the physics behind every movement to prevent injury and maximize output."
+            },
+            "cardio": {
+                title: "CARDIOMAXXING",
+                price: "10,99 €",
+                image: "images/cardio.jpg",
+                desc: "Improve your heart health and endurance. Perfect for lifters who want to improve their conditioning without losing gains."
+            },
+            "powerbuilding": {
+                title: "POWERBUILDING",
+                price: "29,99 €",
+                image: "images/powerbuilding.jpg",
+                desc: "The best of both worlds. Get strong like a powerlifter and look like a bodybuilder. Heavy compounds mixed with hypertrophy accessories."
+            },
+            "powerlifting": {
+                title: "POWERLIFTING ELITE",
+                price: "45,99 €",
+                image: "images/powerlifting.jpg",
+                desc: "Peak for your competition. This program focuses strictly on the Big 3: Squat, Bench, and Deadlift. Pure strength focus."
+            }
+        };
+
+        // 3. NAČÍTANIE DÁT PODĽA URL
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id'); 
+
+        const product = productsDatabase[productId];
+
+        if (product) {
+            document.getElementById('detail-title').innerText = product.title;
+            document.getElementById('detail-price').innerText = product.price;
+            document.getElementById('detail-img').src = product.image;
+            document.getElementById('detail-desc').innerHTML = `<p>${product.desc}</p>`;
+        } else {
+            // Ak produkt nenájde (niekto zadá zlú URL)
+            document.querySelector('.product-detail-container').innerHTML = "<h1>Product not found.</h1>";
+        }
+        
+        // Funkcia pre košík (zatiaľ len alert)
+        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+           alert("Added to cart! (Cart functionality coming soon)");
+        });
+
+    </script>
+</body>
+</html>

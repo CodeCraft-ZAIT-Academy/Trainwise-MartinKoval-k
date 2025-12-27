@@ -1,0 +1,208 @@
+/* ========================================= */
+/* --- ACCOUNT SETTINGS  --- */
+/* ========================================= */
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+.account-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+    background-color: black;
+    min-height: 100vh;
+}
+
+.settings-container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.settings-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.settings-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.settings-header p {
+    color: #888;
+}
+
+/* Karta s nastaveniami */
+.settings-card {
+    background-color: #111;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    overflow: hidden; 
+}
+
+h3 {
+    color: #FFD700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-left: 3px solid #FFD700;
+    padding-left: 10px;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+label {
+    display: block;
+    color: #ccc;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/*  (Políčka)  */
+input {
+    width: 100%; 
+    padding: 15px;
+    background: #050505;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #FFD700;
+    outline: none;
+}
+
+/*  ZAMKNUTÉ POLIA  */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrapper.locked input {
+    background-color: #1a1a1a;
+    color: #888;
+    border-color: #222;
+    cursor: not-allowed;
+    padding-right: 40px; 
+}
+
+
+.input-wrapper.locked.role-wrapper input {
+    color: #FFD700; 
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lock-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    fill: #666; 
+    pointer-events: none;
+}
+
+.role-wrapper .lock-icon {
+    fill: #FFD700; 
+}
+
+.small-text {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 5px;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #333;
+    margin: 30px 0;
+}
+
+/*  TLAČIDLÁ  */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    margin-top: 20px;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #FFD700;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.save-btn:hover {
+    background-color: white;
+}
+
+
+.nav-btn, .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+    width: 85px; 
+    height: 30px;
+    
+    padding: 0; 
+    border-radius: 50px; 
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+
+#back-btn.nav-btn {
+    background-color: white;
+    color: black;
+}
+
+#back-btn.nav-btn:hover {
+    background-color: #ddd;
+}
+
+
+#logout-btn.logout-btn {
+    background-color: transparent;
+    border: 2px solid #FF4444; 
+    color: #FF4444;
+}
+
+#logout-btn.logout-btn:hover {
+    background-color: #FF4444;
+    color: white;
+}

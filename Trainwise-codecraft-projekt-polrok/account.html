@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainwise - Account Settings</title>
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="account.css"> </head>
+<body style="background-color: black;">
+
+    <header class="header">
+        <div class="header-center"> 
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
+        </div>
+        <div class="header-right">
+            <a href="index.html" id="back-btn" class="nav-btn">← Back</a>
+            <button id="logout-btn" class="nav-btn logout-btn">Log Out</button>
+        </div>
+    </header>
+
+    <main class="account-wrapper">
+        <div class="settings-container">
+            
+            <div class="settings-header">
+                <h1>Account Settings</h1>
+                <p>Manage your personal information and security.</p>
+            </div>
+
+            <div class="settings-card">
+                
+                <h3>Profile Information</h3>
+                
+                <div class="input-group">
+                    <label>Email Address (Cannot be changed)</label>
+                    <div class="input-wrapper locked">
+                        <input type="email" id="user-email" readonly disabled>
+                        <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Account Role</label>
+                    <div class="input-wrapper locked role-wrapper">
+                        <input type="text" id="user-role" readonly disabled value="LOADING...">
+                        <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                    </div>
+                    <p class="small-text">To change your role, please contact support.</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="user-name" placeholder="Enter your name">
+                </div>
+
+                <hr class="divider">
+
+                <h3>Security</h3>
+                
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-password" placeholder="Leave empty to keep current">
+                </div>
+
+                <div class="action-buttons">
+                    <button id="save-btn" class="save-btn">SAVE CHANGES</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="account.js"></script>
+
+</body>
+</html>

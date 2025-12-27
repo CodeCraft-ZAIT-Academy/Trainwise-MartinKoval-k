@@ -1,6 +1,6 @@
 /* ========================================= */
 /* --- TRAINWISE APP & DASHBOARD STYLES --- */
-/*                 */
+/* (style2.css) - FINAL AGRESSIVE HEADER    */
 /* ========================================= */
 
 /* Reset */
@@ -20,14 +20,13 @@ body {
     overflow: hidden; 
 }
 
-
+/*  1. header */
 .app-header {
-    height: 80px;
+    height: 80px; 
     background-color: black;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    
+    padding: 0; 
     
     border-bottom: 3px solid;
     border-image: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%) 1;
@@ -38,31 +37,48 @@ body {
 .app-logo-container {
     display: flex;
     align-items: center;
-    gap: 15px;
+    
+    
+    gap: 8px;           
+    padding-left: 10px; 
+    
     text-decoration: none;
+    height: 100%;
 }
 
 .app-logo {
-    height: 45px;
+    
+    height: 70px; 
     width: auto;
+    display: block;
+    object-fit: contain; 
 }
 
 .app-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: #FFD700; 
+   
+    font-size: 45px; 
+    font-weight: 500; 
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: -0.5px;
+    margin: 0;
+    line-height: 0.9; 
+    
+    /* Gradient Text */
+    background: linear-gradient(90deg, #FFC800 0%, #FFD700 50%, #FFAA00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; 
+    -webkit-text-fill-color: transparent;
 }
 
-
+/*  2. LAYOUT  */
 .app-container {
     display: flex;
     flex: 1; 
     overflow: hidden;
 }
 
-/* --- SIDEBAR --- */
+
 .app-sidebar {
     width: 260px;
     background-color: black;
@@ -71,13 +87,11 @@ body {
     flex-direction: column;
     gap: 15px;
     
-    
     border-right: 3px solid;
     border-image: linear-gradient(to bottom, #FFC800 0%, #FFD700 50%, #FFAA00 100%) 1;
     
     flex-shrink: 0;
 }
-
 
 .sidebar-btn {
     display: flex;
@@ -85,10 +99,7 @@ body {
     gap: 15px;
     width: 100%;
     padding: 12px 20px;
-    
-    
     background: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%);
-    
     border: none;
     border-radius: 12px; 
     cursor: pointer;
@@ -103,39 +114,15 @@ body {
     text-transform: capitalize; 
 }
 
-
-
-
-
 .sidebar-btn:hover {
     transform: translateX(5px);
     filter: brightness(1.1);
 }
 
-
 .sidebar-btn.active {
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); 
     border: 1px solid white; 
 }
-
-
-.app-content {
-    flex: 1;
-    padding: 40px;
-    overflow-y: auto;
-    background-color: #080808; 
-}
-
-
-.content-header h2 {
-    color: #FFD700;
-    margin-top: 0;
-    font-size: 2rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 15px;
-}
-
-
 
 .sidebar-icon {
     width: 24px;       
@@ -144,3 +131,18 @@ body {
     display: block;
 }
 
+/*  MAIN CONTENT  */
+.app-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: #080808; 
+}
+
+.content-header h2 {
+    color: #FFD700;
+    margin-top: 0;
+    font-size: 2rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}

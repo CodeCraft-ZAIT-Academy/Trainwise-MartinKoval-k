@@ -128,81 +128,120 @@
         </footer>
     </div>
 
-    <script>
-        // 1. Sidebar logika (rovnaká)
-        const hamburgerBtn = document.querySelector('.hamburger-menu');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const closeBtn = document.getElementById('close-btn');
+   <script>
+    // 1. Sidebar logika 
+    const hamburgerBtn = document.querySelector('.hamburger-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('close-btn');
 
-        if(hamburgerBtn){
-            hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); });
-            function closeMenu() { sidebar.classList.remove('active'); overlay.classList.remove('active'); }
-            closeBtn.addEventListener('click', closeMenu);
-            overlay.addEventListener('click', closeMenu);
+    if(hamburgerBtn){
+        hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); });
+        function closeMenu() { sidebar.classList.remove('active'); overlay.classList.remove('active'); }
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+    }
+
+    
+    const productsDatabase = {
+        "hypertrophy": {
+            id: "hypertrophy",
+            title: "HYPERTROPHY PROGRAM",
+            price: "39,99 €",
+            rawPrice: 39.99,
+            image: "images/hypertrophy.jpg",
+            desc: "This program is designed for maximum muscle growth. Based on the latest scientific research."
+        },
+        "getshredded": {
+            id: "getshredded",
+            title: "GET SHREDDED",
+            price: "15,99 €",
+            rawPrice: 15.99,
+            image: "images/getshredded.jpg",
+            desc: "Lose fat while keeping your muscle. This 60-day plan focuses on high intensity interval training."
+        },
+        "biomechanics": {
+            id: "biomechanics",
+            title: "BIOMECHANICS MASTERCLASS",
+            price: "25,99 €",
+            rawPrice: 25.99,
+            image: "images/biomechanics.jpg",
+            desc: "Learn how to lift safely and efficiently. Understand the physics behind every movement."
+        },
+        "cardio": {
+            id: "cardio",
+            title: "CARDIOMAXXING",
+            price: "10,99 €",
+            rawPrice: 10.99,
+            image: "images/cardio.jpg",
+            desc: "Improve your heart health and endurance."
+        },
+        "powerbuilding": {
+            id: "powerbuilding",
+            title: "POWERBUILDING",
+            price: "29,99 €",
+            rawPrice: 29.99,
+            image: "images/powerbuilding.jpg",
+            desc: "The best of both worlds. Size & Strength."
+        },
+        "powerlifting": {
+            id: "powerlifting",
+            title: "POWERLIFTING ELITE",
+            price: "45,99 €",
+            rawPrice: 45.99,
+            image: "images/powerlifting.jpg",
+            desc: "Peak for your competition. Focus strictly on the Big 3."
         }
+    };
 
-        // 2. DATABÁZA PRODUKTOV 
-        const productsDatabase = {
-            "hypertrophy": {
-                title: "HYPERTROPHY PROGRAM",
-                price: "39,99 €",
-                image: "images/hypertrophy.jpg",
-                desc: "This program is designed for maximum muscle growth. Based on the latest scientific research, it combines volume and intensity to ensure you grow."
-            },
-            "getshredded": {
-                title: "GET SHREDDED",
-                price: "15,99 €",
-                image: "images/getshredded.jpg",
-                desc: "Lose fat while keeping your muscle. This 60-day plan focuses on high intensity interval training and calorie deficit management."
-            },
-            "biomechanics": {
-                title: "BIOMECHANICS MASTERCLASS",
-                price: "25,99 €",
-                image: "images/biomechanics.jpg",
-                desc: "Learn how to lift safely and efficiently. Understand the physics behind every movement to prevent injury and maximize output."
-            },
-            "cardio": {
-                title: "CARDIOMAXXING",
-                price: "10,99 €",
-                image: "images/cardio.jpg",
-                desc: "Improve your heart health and endurance. Perfect for lifters who want to improve their conditioning without losing gains."
-            },
-            "powerbuilding": {
-                title: "POWERBUILDING",
-                price: "29,99 €",
-                image: "images/powerbuilding.jpg",
-                desc: "The best of both worlds. Get strong like a powerlifter and look like a bodybuilder. Heavy compounds mixed with hypertrophy accessories."
-            },
-            "powerlifting": {
-                title: "POWERLIFTING ELITE",
-                price: "45,99 €",
-                image: "images/powerlifting.jpg",
-                desc: "Peak for your competition. This program focuses strictly on the Big 3: Squat, Bench, and Deadlift. Pure strength focus."
-            }
-        };
+    // 3. NAČÍTANIE DÁT
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+    const product = productsDatabase[productId];
 
-        // 3. NAČÍTANIE DÁT PODĽA URL
-        const params = new URLSearchParams(window.location.search);
-        const productId = params.get('id'); 
+    if (product) {
+        document.getElementById('detail-title').innerText = product.title;
+        document.getElementById('detail-price').innerText = product.price;
+        document.getElementById('detail-img').src = product.image;
+        document.getElementById('detail-desc').innerHTML = `<p>${product.desc}</p>`;
+    } else {
+        document.querySelector('.product-detail-container').innerHTML = "<h1>Product not found.</h1>";
+    }
 
-        const product = productsDatabase[productId];
+    // 4. PRIDANIE DO KOŠÍKA 
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    
+    addToCartBtn.addEventListener('click', () => {
+        if(!product) return;
 
-        if (product) {
-            document.getElementById('detail-title').innerText = product.title;
-            document.getElementById('detail-price').innerText = product.price;
-            document.getElementById('detail-img').src = product.image;
-            document.getElementById('detail-desc').innerHTML = `<p>${product.desc}</p>`;
-        } else {
-            // Ak produkt nenájde (niekto zadá zlú URL)
-            document.querySelector('.product-detail-container').innerHTML = "<h1>Product not found.</h1>";
-        }
         
-        // Funkcia pre košík (zatiaľ len alert)
-        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-           alert("Added to cart! (Cart functionality coming soon)");
-        });
+        let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
+        
+        
+        cart.push(product);
+        
+        
+        localStorage.setItem('trainwise_cart', JSON.stringify(cart));
 
-    </script>
+        
+        const originalText = addToCartBtn.innerText;
+        addToCartBtn.innerText = "✅ ADDED!";
+        addToCartBtn.style.backgroundColor = "white";
+        
+        setTimeout(() => {
+            addToCartBtn.innerText = originalText;
+            addToCartBtn.style.backgroundColor = "#FFD700";
+        }, 1500);
+        
+        updateCartBadge(); 
+    });
+
+    
+    function updateCartBadge() {
+        let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
+       
+        console.log("Cart items:", cart.length);
+    }
+</script>
 </body>
 </html>

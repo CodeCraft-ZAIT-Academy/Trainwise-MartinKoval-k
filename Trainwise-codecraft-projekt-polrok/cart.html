@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainwise - Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color: black;">
+
+    <header class="header">
+        <div class="header-left">
+             <a href="shoppage.html" class="nav-btn">← Back to Shop</a>
+        </div>
+        <div class="header-center"> 
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
+        </div>
+        <div class="header-right">
+             </div>
+    </header>
+
+    <main class="content cart-wrapper">
+        <h1 class="cart-title">YOUR CART</h1>
+
+        <div class="cart-container">
+            <div class="cart-items" id="cart-items-container">
+                <p>Your cart is empty.</p>
+            </div>
+
+            <div class="cart-summary">
+                <h3>SUMMARY</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">0,00 €</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (Estimated)</span>
+                    <span>0,00 €</span>
+                </div>
+                <hr class="summary-divider">
+                <div class="summary-row total">
+                    <span>TOTAL</span>
+                    <span id="cart-total">0,00 €</span>
+                </div>
+                
+                <a href="checkout.html" class="checkout-btn" id="checkout-btn">PROCEED TO CHECKOUT</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // NAČÍTANIE KOŠÍKA
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            container.innerHTML = ''; // Vyčistiť
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:white;">Your cart is empty. <a href="shoppage.html" style="color:#FFD700;">Go shopping</a></p>';
+                checkoutBtn.style.display = 'none';
+                subtotalEl.innerText = "0,00 €";
+                totalEl.innerText = "0,00 €";
+                return;
+            }
+
+            checkoutBtn.style.display = 'block';
+
+           
+            cart.forEach((item, index) => {
+                totalPrice += item.rawPrice;
+
+                const itemHTML = `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+                        <div class="cart-item-info">
+                            <h4>${item.title}</h4>
+                            <p class="cart-item-price">${item.price}</p>
+                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHTML;
+            });
+
+            // Aktualizovanie ceny
+            subtotalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
+            totalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
+        }
+
+        // ODSTRÁNENIE POLOŽKY
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
+            cart.splice(index, 1); // Vymazanie položky na danom indexe
+            localStorage.setItem('trainwise_cart', JSON.stringify(cart));
+            loadCart(); // Znova načítať
+        }
+
+        // Spustiť pri načítaní
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+
+</body>
+</html>

@@ -897,3 +897,198 @@ html, body {
         font-size: 1.8rem;
     }
 }
+
+
+
+/* ========================================= */
+/*  CART & CHECKOUT STYLES pre kosik  */
+/* ========================================= */
+
+.cart-wrapper {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.cart-title {
+    color: white;
+    border-left: 5px solid #FFD700;
+    padding-left: 15px;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+}
+
+.cart-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* Zoznam položiek */
+.cart-items {
+    flex: 2;
+    min-width: 300px;
+}
+
+.cart-item {
+    display: flex;
+    background: #111;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #333;
+    padding: 10px;
+    align-items: center;
+}
+
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.cart-item-info {
+    flex: 1;
+    color: white;
+}
+
+.cart-item-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    color: #FFD700;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.remove-btn:hover {
+    color: white;
+}
+
+
+.cart-summary {
+    flex: 1;
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #FFD700;
+    height: fit-content;
+    min-width: 250px;
+}
+
+.cart-summary h3 {
+    color: white;
+    margin-top: 0;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.summary-row.total {
+    color: #FFD700;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.checkout-btn {
+    display: block;
+    background-color: #FFD700;
+    color: black;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.checkout-btn:hover {
+    background-color: white;
+}
+
+/*  CHECKOUT PAGE  */
+.checkout-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.checkout-box {
+    background: #111;
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #FFD700;
+    width: 100%;
+    max-width: 500px;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #222;
+    color: white;
+    box-sizing: border-box;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.pay-btn {
+    width: 100%;
+    background: #FFD700;
+    border: none;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.pay-btn:hover {
+    background: white;
+}
+
+.cancel-link {
+    display: block;
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+    text-decoration: none;
+}

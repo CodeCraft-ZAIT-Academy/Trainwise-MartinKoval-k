@@ -1,0 +1,146 @@
+/* ========================================= */
+/* --- TRAINWISE APP & DASHBOARD STYLES --- */
+/*                 */
+/* ========================================= */
+
+/* Reset */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+
+.app-header {
+    height: 80px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    
+    
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%) 1;
+    
+    flex-shrink: 0;
+}
+
+.app-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+}
+
+.app-logo {
+    height: 45px;
+    width: auto;
+}
+
+.app-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #FFD700; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.app-container {
+    display: flex;
+    flex: 1; 
+    overflow: hidden;
+}
+
+/* --- SIDEBAR --- */
+.app-sidebar {
+    width: 260px;
+    background-color: black;
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+    
+    border-right: 3px solid;
+    border-image: linear-gradient(to bottom, #FFC800 0%, #FFD700 50%, #FFAA00 100%) 1;
+    
+    flex-shrink: 0;
+}
+
+
+.sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 12px 20px;
+    
+    
+    background: linear-gradient(90deg, #FFC800 0%, #FFD700 40%, #FFAA00 100%);
+    
+    border: none;
+    border-radius: 12px; 
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, filter 0.2s;
+    color: black; 
+}
+
+.sidebar-btn span {
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: capitalize; 
+}
+
+
+
+
+
+.sidebar-btn:hover {
+    transform: translateX(5px);
+    filter: brightness(1.1);
+}
+
+
+.sidebar-btn.active {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); 
+    border: 1px solid white; 
+}
+
+
+.app-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: #080808; 
+}
+
+
+.content-header h2 {
+    color: #FFD700;
+    margin-top: 0;
+    font-size: 2rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+
+
+.sidebar-icon {
+    width: 24px;       
+    height: 24px;      
+    object-fit: contain; 
+    display: block;
+}
+

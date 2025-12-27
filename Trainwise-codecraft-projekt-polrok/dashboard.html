@@ -6,8 +6,16 @@
     <title>Trainwise - Coach Dashboard</title>
     <link rel="stylesheet" href="style2.css">
 </head>
+
+
+
+
 <body>
 
+
+
+
+    
     <header class="app-header">
         <a href="index.html" class="app-logo-container">
             <img src="images/logo3.png" alt="TR Logo" class="app-logo">
@@ -55,9 +63,117 @@
             <div class="content-header">
                 <h2>Welcome back, Coach! 👋</h2>
             </div>
-            </main>
+            <main class="app-content">
+    <div class="content-header">
+        <h2>Coach Overview</h2>
+        <p class="subtitle">Welcome back, Coach! Here is what's happening today.</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Total Clients</span>
+            <span class="stat-value">24</span>
+            <span class="stat-change positive">+2 this month</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Active Programs</span>
+            <span class="stat-value">18</span>
+            <span class="stat-change">92% completion rate</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Revenue (Dec)</span>
+            <span class="stat-value">1,450€</span>
+            <span class="stat-change positive">+15% vs last month</span>
+        </div>
+    </div>
+
+    <div class="dashboard-main-grid">
+        
+        <div class="dash-panel chart-panel">
+            <h3>Weekly Activity</h3>
+            <div class="fake-chart">
+                <div class="bar" style="height: 40%"><span>M</span></div>
+                <div class="bar" style="height: 70%"><span>T</span></div>
+                <div class="bar" style="height: 55%"><span>W</span></div>
+                <div class="bar active" style="height: 90%"><span>T</span></div>
+                <div class="bar" style="height: 60%"><span>F</span></div>
+                <div class="bar" style="height: 30%"><span>S</span></div>
+                <div class="bar" style="height: 20%"><span>S</span></div>
+            </div>
+        </div>
+
+        <div class="dash-panel clients-panel">
+            <h3>Recent Updates</h3>
+            <div class="client-item">
+                <div class="client-info">
+                    <strong>Filip Nagy</strong>
+                    <span>Logged "Push Workout"</span>
+                </div>
+                <span class="time">2m ago</span>
+            </div>
+            <div class="client-item">
+                <div class="client-info">
+                    <strong>Jakub Král</strong>
+                    <span>Updated body weight (84.2 kg)</span>
+                </div>
+                <span class="time">15m ago</span>
+            </div>
+            <div class="client-item">
+                <div class="client-info">
+                    <strong>Marek Sivák</strong>
+                    <span>New message regarding meal plan</span>
+                </div>
+                <span class="time">1h ago</span>
+            </div>
+        </div>
+
+    </div>
+</main>
+        
+        
+        </main>
 
     </div>
 
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // TVOJA KONFIGURÁCIA
+    const firebaseConfig = {
+        apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
+        authDomain: "trainwise-webapp.firebaseapp.com",
+        projectId: "trainwise-webapp",
+        storageBucket: "trainwise-webapp.firebasestorage.app",
+        messagingSenderId: "644514176585",
+        appId: "1:644514176585:web:75dc6a6a11503ce7eb6998",
+        measurementId: "G-W09Q3PGNJ7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // KONTROLA PRÍSTUPU
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            // Ak nie je prihlásený vôbec, vyhoď ho na Login
+            window.location.href = "Login.html";
+        } else {
+            // Ak je prihlásený, skontroluj či je COACH
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const role = docSnap.data().role;
+                if (role !== 'coach') {
+                    // Ak je Athlete, vyhoď ho na Home (kde mu vyskočí kartička cez navbar.js)
+                    window.location.href = "index.html";
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

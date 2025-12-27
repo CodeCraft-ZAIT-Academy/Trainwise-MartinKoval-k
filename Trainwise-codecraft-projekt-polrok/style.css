@@ -1102,7 +1102,7 @@ html, body {
 }
 
 /* ========================================= */
-/* --- COACH PROMO POPUP (Modal) --- */
+/*  COACH PROMO POPUP  */
 /* ========================================= */
 
 .popup-overlay {
@@ -1111,32 +1111,33 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* Tmavé pozadie */
-    z-index: 9999; /* Aby to bolo úplne navrchu */
+    background-color: rgba(0, 0, 0, 0.85); 
+    z-index: 9999; 
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px); /* Rozmazanie pozadia */
+    backdrop-filter: blur(5px); 
 }
 
 .popup-content {
     position: relative;
     width: 100%;
-    max-width: 500px; /* Maximálna šírka kartičky */
+    max-width: 800px; 
+    height: 600px;
     text-align: center;
     animation: popIn 0.3s ease-out;
 }
 
-/* Tvoj obrázok kartičky */
+
 .promo-img {
     width: 100%;
     height: auto;
-    border-radius: 15px; /* Zaoblené rohy */
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); /* Zlatá žiara okolo karty */
+    border-radius: 15px; 
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); 
     display: block;
 }
 
-/* Krížik na zatvorenie */
+
 .close-popup {
     position: absolute;
     top: -40px;

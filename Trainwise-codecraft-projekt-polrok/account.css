@@ -206,3 +206,179 @@ input:focus {
     background-color: #FF4444;
     color: white;
 }
+
+
+/* --- PROFILE SECTION --- */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #333;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.avatar-container:hover {
+    border-color: #FFD700;
+}
+
+.avatar-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0; /* Reset paddingu z inputov */
+    background: #000;
+}
+
+/* Hover efekt "Change" */
+.edit-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 5px 0;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.avatar-container:hover .edit-overlay {
+    opacity: 1;
+}
+
+.role-badge {
+    margin-top: 10px;
+    color: #FFD700;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+/* --- MODAL (POPUP) GRID --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    padding: 25px;
+    text-align: center;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: white;
+    border: none;
+    padding: 0;
+}
+
+.close-modal {
+    color: #888;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.close-modal:hover { color: white; }
+
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+    max-height: 400px;
+    overflow-y: auto; /* Scrollovanie ak sa nezmestia */
+}
+
+.avatar-option {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+    background: #000;
+}
+
+.avatar-option img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 0;
+    background: transparent;
+}
+
+/* Vybraná ikonka */
+.avatar-option.selected {
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transform: scale(1.1);
+}
+
+/* Zamknutá ikonka */
+.avatar-option.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.2rem;
+}
+
+/* Tlačidlo Save */
+.save-avatar-btn {
+    width: 100%;
+    padding: 12px;
+    background: #333;
+    color: #888;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: not-allowed;
+}
+
+.save-avatar-btn.active {
+    background: #FFD700;
+    color: black;
+    cursor: pointer;
+}

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainwise - Athlete App</title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="app-header">
+        <a href="app.html" class="app-logo-container">
+            <img src="images/logo3.png" alt="TR Logo" class="app-logo">
+            <span class="app-title">TRAINING APP</span>
+        </a>
+
+        <div class="header-right">
+            <span id="header-username" class="user-name"></span>
+            <a href="account.html" class="profile-link">
+                <img id="header-profile-img" src="images/avatar-19.png" alt="Profile" class="header-avatar">
+            </a>
+        </div>
+    </header>
+
+    <div class="app-container">
+        
+        <aside class="app-sidebar">
+            
+            <a href="#" id="nav-home" class="sidebar-btn active">
+                <i class="fas fa-home sidebar-icon-fa"></i> <span>Home</span>
+            </a>
+
+            <a href="#" class="sidebar-btn">
+                <i class="fas fa-dumbbell sidebar-icon-fa"></i>
+                <span>Workouts</span>
+            </a>
+
+            <a href="#" class="sidebar-btn">
+                <i class="fas fa-calendar-alt sidebar-icon-fa"></i>
+                <span>Calendar</span>
+            </a>
+
+            <a href="#" id="nav-messages" class="sidebar-btn">
+                <i class="fas fa-comment-dots sidebar-icon-fa"></i>
+                <span>Messages</span>
+            </a>
+
+            <a href="#" class="sidebar-btn">
+                <i class="fas fa-running sidebar-icon-fa"></i>
+                <span>Exercises</span>
+            </a>
+            
+            <a href="#" class="sidebar-btn">
+                <i class="fas fa-weight sidebar-icon-fa"></i>
+                <span>Bodyweight</span>
+            </a>
+
+        </aside>
+
+        <main class="app-content">
+            
+            <div id="section-home">
+                <div class="content-header">
+                    <h2 id="welcome-msg">Welcome, Athlete!</h2>
+                    <p class="subtitle">Ready to crush your goals today?</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Next Workout</span>
+                        <span class="stat-value" style="font-size: 1.5rem;">Upper Body Push</span>
+                        <span class="stat-change">Scheduled for Today</span>
+                    </div>
+
+                    <div id="invite-notification" class="dash-panel" style="display: none; background-color: #1a1a1a; border: 1px solid #FFD700; margin-top: 20px; animation: fadeIn 0.5s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                            
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div style="background: rgba(255, 215, 0, 0.2); padding: 10px; border-radius: 50%;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; color: white; font-size: 1.1rem;">New Coach Invitation</h3>
+                                    <p id="invite-text" style="margin: 5px 0 0; color: #ccc; font-size: 0.9rem;">Coach wants to connect with you.</p>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 10px;">
+                                <button id="decline-btn" class="save-btn" style="background: transparent; border: 1px solid #FF4444; color: #FF4444; width: auto; padding: 8px 15px;">Decline</button>
+                                <button id="accept-btn" class="save-btn" style="background: #00FF88; color: black; width: auto; padding: 8px 20px;">Accept</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Current Weight</span>
+                        <span class="stat-value">84.5 kg</span>
+                        <span class="stat-change positive">-0.5kg this week</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Coach</span>
+                        <span class="stat-value" id="coach-status" style="font-size: 1.2rem; color: #666;">Not connected</span>
+                        <span class="stat-change" id="coach-action">Check messages for invites</span>
+                    </div>
+                </div>
+
+                <div class="dash-panel" style="margin-top: 30px; height: 300px; display: flex; align-items: center; justify-content: center; color: #444;">
+                    <p>Your weekly training stats will appear here.</p>
+                </div>
+            </div>
+            <div id="section-messages" style="display: none;">
+                <div class="content-header">
+                    <h2>Messages</h2>
+                    <p class="subtitle">Chat with your Coach.</p>
+                </div>
+
+                <div class="chat-layout">
+                    <div class="chat-window" style="width: 100%;">
+                        
+                        <div class="chat-header-bar">
+                            <span id="chat-coach-name">Loading Coach...</span>
+                            <button id="leave-coach-btn" class="delete-connection-btn" style="display: none;">
+                                Leave Coach
+                            </button>
+                        </div>
+
+                        <div class="chat-messages-area" id="chat-messages-area">
+                            <p style="text-align:center; padding:20px; color:#666;">Loading messages...</p>
+                        </div>
+
+                        <form class="chat-input-area" id="chat-form" style="display: none;">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="Message your coach..." autocomplete="off">
+                            <button type="submit" class="chat-send-btn">➤</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+    </div>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    // PRIDAL SOM IMPORTY PRE CHAT: addDoc, serverTimestamp, onSnapshot, orderBy
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // TVOJA CONFIGURÁCIA
+    const firebaseConfig = {
+        apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
+        authDomain: "trainwise-webapp.firebaseapp.com",
+        projectId: "trainwise-webapp",
+        storageBucket: "trainwise-webapp.firebasestorage.app",
+        messagingSenderId: "644514176585",
+        appId: "1:644514176585:web:75dc6a6a11503ce7eb6998",
+        measurementId: "G-W09Q3PGNJ7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- ELEMENTY UI ---
+    // Header
+    const headerProfileImg = document.getElementById('header-profile-img');
+    const headerUserName = document.getElementById('header-username');
+    
+    // Home Elements
+    const welcomeMsg = document.getElementById('welcome-msg');
+    const coachStatus = document.getElementById('coach-status');
+    const coachAction = document.getElementById('coach-action');
+    
+    // Invite Elements
+    const inviteNotification = document.getElementById('invite-notification');
+    const inviteText = document.getElementById('invite-text');
+    const acceptBtn = document.getElementById('accept-btn');
+    const declineBtn = document.getElementById('decline-btn');
+
+    // Navigácia & Sekcie (NOVÉ)
+    const navHome = document.getElementById('nav-home');
+    const navMessages = document.getElementById('nav-messages');
+    const sectionHome = document.getElementById('section-home');
+    const sectionMessages = document.getElementById('section-messages');
+
+    // Chat Elements (NOVÉ)
+    const chatCoachName = document.getElementById('chat-coach-name');
+    const chatMessagesArea = document.getElementById('chat-messages-area');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const leaveCoachBtn = document.getElementById('leave-coach-btn');
+
+    let currentInviteId = null; 
+    let pendingCoachId = null;  
+    let myCoachId = null;       // Tu si uložíme ID nášho coacha
+    let unsubscribeChat = null; // Pre vypnutie počúvania chatu
+
+    // HLAVNÁ FUNKCIA (AUTH)
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "Login.html";
+        } else {
+            // 1. Načítanie profilu Atléta
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                
+                if (data.role !== 'athlete') {
+                    window.location.href = "dashboard.html";
+                    return;
+                }
+
+                if (data.name) {
+                    headerUserName.innerText = data.name;
+                    welcomeMsg.innerText = `Let's go, ${data.name}!`;
+                }
+                if (data.photoURL) headerProfileImg.src = `images/${data.photoURL}`;
+
+                // A. KONTROLA: Mám už Coacha?
+                if (data.myCoachId) {
+                    myCoachId = data.myCoachId; // Uložíme si ho pre chat
+                    coachStatus.innerText = "Connected ✅";
+                    coachStatus.style.color = "#00FF88";
+                    coachAction.innerText = "Check messages for updates";
+                } else {
+                    // B. Ak nemám Coacha, skontroluj pozvánky
+                    checkInvitations(user.uid);
+                }
+            }
+        }
+    });
+
+    // --- NAVIGÁCIA (PREPÍNANIE SEKCIÍ) ---
+    if(navMessages) {
+        navMessages.addEventListener('click', (e) => {
+            e.preventDefault();
+            // UI
+            if(navHome) navHome.classList.remove('active');
+            navMessages.classList.add('active');
+            // Sections
+            sectionHome.style.display = 'none';
+            sectionMessages.style.display = 'block';
+            // Start Chat
+            initChat();
+        });
+    }
+
+    if(navHome) {
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            // UI
+            navMessages.classList.remove('active');
+            navHome.classList.add('active');
+            // Sections
+            sectionMessages.style.display = 'none';
+            sectionHome.style.display = 'block';
+        });
+    }
+
+    // --- LOGIKA POZVÁNOK (Tvoje pôvodné funkcie) ---
+    async function checkInvitations(athleteId) {
+        const invitesRef = collection(db, "invitations");
+        const q = query(invitesRef, 
+            where("toAthleteId", "==", athleteId), 
+            where("status", "==", "pending")
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const inviteDoc = querySnapshot.docs[0];
+            const inviteData = inviteDoc.data();
+
+            currentInviteId = inviteDoc.id;
+            pendingCoachId = inviteData.fromCoachId;
+            const coachName = inviteData.fromCoachName || "A Coach";
+
+            inviteText.innerHTML = `<strong>${coachName}</strong> wants to be your coach.`;
+            inviteNotification.style.display = "block";
+        }
+    }
+
+    acceptBtn.addEventListener('click', async () => {
+        if (!currentInviteId || !pendingCoachId) return;
+        acceptBtn.innerText = "Connecting...";
+        try {
+            const user = auth.currentUser;
+            await updateDoc(doc(db, "users", user.uid), { myCoachId: pendingCoachId });
+            await updateDoc(doc(db, "invitations", currentInviteId), { status: "accepted" });
+
+            inviteNotification.style.display = "none";
+            coachStatus.innerText = "Connected ✅";
+            coachStatus.style.color = "#00FF88";
+            coachAction.innerText = "Invitation accepted!";
+            myCoachId = pendingCoachId; // Aktualizuj premennú
+            alert("Success! You are now connected with your Coach.");
+        } catch (error) {
+            console.error("Error accepting invite:", error);
+            alert("Error connecting.");
+        }
+    });
+
+    declineBtn.addEventListener('click', async () => {
+        if (!currentInviteId) return;
+        if(confirm("Are you sure you want to decline?")) {
+            try {
+                await updateDoc(doc(db, "invitations", currentInviteId), { status: "declined" });
+                inviteNotification.style.display = "none";
+            } catch (error) { console.error(error); }
+        }
+    });
+
+
+    // --- CHAT LOGIKA (NOVÉ) ---
+
+    // 1. Inicializácia Chatu
+    async function initChat() {
+        if (!myCoachId) {
+            chatMessagesArea.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>You don't have a coach yet. Accept an invite on the Home screen.</p>";
+            chatCoachName.innerText = "No Coach";
+            chatForm.style.display = "none";
+            leaveCoachBtn.style.display = "none";
+            return;
+        }
+
+        // Získaj meno trénera
+        const coachSnap = await getDoc(doc(db, "users", myCoachId));
+        if (coachSnap.exists()) {
+            chatCoachName.innerText = coachSnap.data().name || "Coach";
+        } else {
+            chatCoachName.innerText = "Coach";
+        }
+
+        chatForm.style.display = "flex";
+        leaveCoachBtn.style.display = "block";
+        
+        // Otvor spojenie
+        const user = auth.currentUser;
+        if(user) openChatConnection(user.uid, myCoachId);
+    }
+
+    // 2. Real-time správy
+    function openChatConnection(myId, coachId) {
+        // ID konverzácie: (menšieID_väčšieID)
+        const conversationId = myId < coachId ? `${myId}_${coachId}` : `${coachId}_${myId}`;
+
+        if (unsubscribeChat) unsubscribeChat();
+
+        const q = query(collection(db, "chats", conversationId, "messages"), orderBy("timestamp", "asc"));
+
+        unsubscribeChat = onSnapshot(q, (snapshot) => {
+            chatMessagesArea.innerHTML = "";
+            
+            if (snapshot.empty) {
+                chatMessagesArea.innerHTML = "<p style='text-align:center; color:#444; margin-top:20px;'>No messages yet. Say hi! 👋</p>";
+            }
+
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                const isMe = msg.senderId === myId;
+                
+                const bubble = document.createElement('div');
+                bubble.classList.add('message-bubble');
+                bubble.classList.add(isMe ? 'me' : 'them'); // 'me' = zlatá, 'them' = sivá
+                
+                const date = msg.timestamp ? msg.timestamp.toDate() : new Date();
+                const timeStr = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
+
+                bubble.innerHTML = `${msg.text}<span class="msg-time">${timeStr}</span>`;
+                chatMessagesArea.appendChild(bubble);
+            });
+
+            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+        });
+    }
+
+    // 3. Odoslanie správy
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (!text || !myCoachId) return;
+
+        const user = auth.currentUser;
+        const conversationId = user.uid < myCoachId ? `${user.uid}_${myCoachId}` : `${myCoachId}_${user.uid}`;
+
+        chatInput.value = ""; 
+
+        await addDoc(collection(db, "chats", conversationId, "messages"), {
+            text: text,
+            senderId: user.uid,
+            timestamp: serverTimestamp()
+        });
+    });
+
+    // 4. Leave Coach
+    leaveCoachBtn.addEventListener('click', async () => {
+        if(confirm("Are you sure you want to disconnect from your Coach?")) {
+            try {
+                const user = auth.currentUser;
+                await updateDoc(doc(db, "users", user.uid), { myCoachId: null });
+                alert("Disconnected.");
+                location.reload(); 
+            } catch(e) {
+                console.error(e);
+                alert("Error disconnecting.");
+            }
+        }
+    });
+
+    </script>
+</body>
+</html>

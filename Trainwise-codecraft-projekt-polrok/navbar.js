@@ -38,6 +38,9 @@ if(popup) {
     });
 }
 
+
+// ... (začiatok súboru ostáva rovnaký)
+
 // SPUSTÍ SA PRI NAČÍTANÍ STRÁNKY
 onAuthStateChanged(auth, async (user) => {
     
@@ -45,10 +48,8 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         console.log("Logged in as:", user.email);
 
-        // Account tlačidlo ide do nastavení
         if(accountBtn) accountBtn.href = "account.html";
 
-        // Dashboard tlačidlo - kontrola ROLY
         if(dashboardBtn) {
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef);
@@ -56,30 +57,25 @@ onAuthStateChanged(auth, async (user) => {
             if (docSnap.exists()) {
                 const role = docSnap.data().role;
 
+                // TOTO JE TÁ ZMENA:
                 if (role === 'coach') {
-                    // A) COACH -> Pustíme ho dnu
+                    // A) COACH -> Ide na Dashboard
                     dashboardBtn.href = "dashboard.html";
-                    dashboardBtn.onclick = null; // Pre istotu vyčistíme blokovanie
+                    dashboardBtn.onclick = null; 
                 } 
                 else {
-                    // B) ATHLETE -> ZABLOKUJEME TO a ukážeme kartičku
-                    dashboardBtn.href = "#"; 
-                    dashboardBtn.onclick = (e) => {
-                        e.preventDefault(); 
-                        if(popup) popup.style.display = 'flex';
-                    };
+                    // B) ATHLETE -> Ide do APKY (app.html)
+                    // Už žiadna reklama (popup), teraz majú svoju apku!
+                    dashboardBtn.href = "app.html"; 
+                    dashboardBtn.innerText = "Training App"; // Zmeníme aj text tlačidla
+                    dashboardBtn.onclick = null;
                 }
             }
         }
 
     } else {
         // --- SCENÁR 2: UŽÍVATEĽ NIE JE PRIHLÁSENÝ (GUEST) ---
-        console.log("User is guest");
-
-        // Account tlačidlo ide na Login
-        if(accountBtn) accountBtn.href = "Login.html";
-
-        // Dashboard tlačidlo -> TIEŽ UKÁŽE KARTIČKU (Zmena podľa požiadavky)
+        // ... (tento kód pre hosťa ostáva, tam reklamu necháme)
         if(dashboardBtn) {
             dashboardBtn.href = "#"; 
             dashboardBtn.onclick = (e) => {

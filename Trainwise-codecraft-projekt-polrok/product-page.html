@@ -16,7 +16,7 @@
         <nav class="sidebar-links">
             <a href="AboutUs.html">About Us</a>
             <a href="shoppage.html">Shop</a>
-            <a href="Trainwise-app.html">App</a>
+            <a href="app.html">App</a>
             <a href="Login.html">Login</a>
             <a href="cart.html">Cart</a>
         </nav>
@@ -33,27 +33,26 @@
                 <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
             </div>
             <div class="header-right">
-    <a href="AboutUs.html" class="nav-btn">AboutUs</a>
-    <a href="shoppage.html" class="nav-btn">shop</a>
-    <a href="Trainwise-app.html" class="nav-btn">app</a>
-    
-    <a href="dashboard.html" class="nav-btn">Dashboard</a>
-    
-    <a href="Login.html" class="nav-btn login-btn-with-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-        </svg>
-        <span>Account</span>
-    </a>  
+                <a href="AboutUs.html" class="nav-btn">AboutUs</a>
+                <a href="shoppage.html" class="nav-btn">shop</a>
+                <a href="#" id="nav-training-app" class="nav-btn">Training App</a>
+                <a href="#" id="nav-dashboard" class="nav-btn">Dashboard</a>
+                
+                <a href="Login.html" class="nav-btn login-btn-with-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                    </svg>
+                    <span>Account</span>
+                </a>  
 
-    <a href="cart.html" class="nav-btn cart-btn" style="padding: 5px 10px;">
-        <img src="images/cart-icon.png" alt="Cart" style="height: 22px; width: auto; vertical-align: middle;">
-    </a>
-</div>
+                <a href="cart.html" class="nav-btn cart-btn" style="padding: 5px 10px;">
+                    <img src="images/cart-icon.png" alt="Cart" style="height: 22px; width: auto; vertical-align: middle;">
+                    <span class="cart-quantity" style="display:none;">0</span>
+                </a>
+            </div>
         </header>
 
         <main class="content product-detail-wrapper">
-            
             <a href="shoppage.html" class="back-link">← Back to Shop</a>
 
             <div class="product-detail-container">
@@ -87,163 +86,146 @@
         </main>
 
         <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-left">
-                    <div class="footer-brand">
-                        <img src="images/logo.png" alt="Trainwise Logo" class="footer-logo">
-                        <span class="brand-text">TRAINWISE</span>
-                    </div>
-                    <p class="footer-desc">The free, maximalist lifting tracker for serious athletes and coaches.</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Product</h4>
-                        <ul>
-                            <li><a href="Trainwise-app.html">Application</a></li>
-                            <li><a href="shoppage.html">Training Plans</a></li>
-                            <li><a href="#">Pricing</a></li>
-                            <li><a href="#">Features</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <ul>
-                            <li><a href="AboutUs.html">About Us</a></li>
-                            <li><a href="#">Career</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <ul>
-                            <li><a href="#">Terms of Use</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Cookies</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <div class="footer-bottom">
                 <p>&copy; 2024 Trainwise. All rights reserved.</p>
             </div>
         </footer>
     </div>
 
-   <script>
-    // 1. Sidebar logika 
-    const hamburgerBtn = document.querySelector('.hamburger-menu');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const closeBtn = document.getElementById('close-btn');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    if(hamburgerBtn){
-        hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); });
-        function closeMenu() { sidebar.classList.remove('active'); overlay.classList.remove('active'); }
-        closeBtn.addEventListener('click', closeMenu);
-        overlay.addEventListener('click', closeMenu);
-    }
+        // FIREBASE KONFIGURÁCIA
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
+            authDomain: "trainwise-webapp.firebaseapp.com",
+            projectId: "trainwise-webapp",
+            storageBucket: "trainwise-webapp.firebasestorage.app",
+            messagingSenderId: "644514176585",
+            appId: "1:644514176585:web:75dc6a6a11503ce7eb6998",
+            measurementId: "G-W09Q3PGNJ7"
+        };
 
-    
-    const productsDatabase = {
-        "hypertrophy": {
-            id: "hypertrophy",
-            title: "HYPERTROPHY PROGRAM",
-            price: "39,99 €",
-            rawPrice: 39.99,
-            image: "images/hypertrophy.jpg",
-            desc: "This program is designed for maximum muscle growth. Based on the latest scientific research."
-        },
-        "getshredded": {
-            id: "getshredded",
-            title: "GET SHREDDED",
-            price: "15,99 €",
-            rawPrice: 15.99,
-            image: "images/getshredded.jpg",
-            desc: "Lose fat while keeping your muscle. This 60-day plan focuses on high intensity interval training."
-        },
-        "biomechanics": {
-            id: "biomechanics",
-            title: "BIOMECHANICS MASTERCLASS",
-            price: "25,99 €",
-            rawPrice: 25.99,
-            image: "images/biomechanics.jpg",
-            desc: "Learn how to lift safely and efficiently. Understand the physics behind every movement."
-        },
-        "cardio": {
-            id: "cardio",
-            title: "CARDIOMAXXING",
-            price: "10,99 €",
-            rawPrice: 10.99,
-            image: "images/cardio.jpg",
-            desc: "Improve your heart health and endurance."
-        },
-        "powerbuilding": {
-            id: "powerbuilding",
-            title: "POWERBUILDING",
-            price: "29,99 €",
-            rawPrice: 29.99,
-            image: "images/powerbuilding.jpg",
-            desc: "The best of both worlds. Size & Strength."
-        },
-        "powerlifting": {
-            id: "powerlifting",
-            title: "POWERLIFTING ELITE",
-            price: "45,99 €",
-            rawPrice: 45.99,
-            image: "images/powerlifting.jpg",
-            desc: "Peak for your competition. Focus strictly on the Big 3."
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        let currentUid = null;
+
+        // 1. Sidebar logika
+        const hamburgerBtn = document.querySelector('.hamburger-menu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('close-btn');
+
+        if(hamburgerBtn){
+            hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); });
+            const closeMenu = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); };
+            closeBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
         }
-    };
 
-    // 3. NAČÍTANIE DÁT
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
-    const product = productsDatabase[productId];
+        // 2. Databáza produktov
+        const productsDatabase = {
+            "hypertrophy": {
+                id: "hypertrophy",
+                title: "HYPERTROPHY PROGRAM",
+                price: "39,99 €",
+                rawPrice: 39.99,
+                image: "images/hypertrophy.jpg",
+                desc: "This program is designed for maximum muscle growth. Based on the latest scientific research."
+            },
+            "getshredded": {
+                id: "getshredded",
+                title: "GET SHREDDED",
+                price: "15,99 €",
+                rawPrice: 15.99,
+                image: "images/getshredded.jpg",
+                desc: "Lose fat while keeping your muscle. This 60-day plan focuses on high intensity interval training."
+            },
+            "biomechanics": {
+                id: "biomechanics",
+                title: "BIOMECHANICS MASTERCLASS",
+                price: "25,99 €",
+                rawPrice: 25.99,
+                image: "images/biomechanics.jpg",
+                desc: "Learn how to lift safely and efficiently. Understand the physics behind every movement."
+            },
+            "cardio": {
+                id: "cardio",
+                title: "CARDIOMAXXING",
+                price: "10,99 €",
+                rawPrice: 10.99,
+                image: "images/cardio.jpg",
+                desc: "Improve your heart health and endurance."
+            },
+            "powerbuilding": {
+                id: "powerbuilding",
+                title: "POWERBUILDING",
+                price: "29,99 €",
+                rawPrice: 29.99,
+                image: "images/powerbuilding.jpg",
+                desc: "The best of both worlds. Size & Strength."
+            },
+            "powerlifting": {
+                id: "powerlifting",
+                title: "POWERLIFTING ELITE",
+                price: "45,99 €",
+                rawPrice: 45.99,
+                image: "images/powerlifting.jpg",
+                desc: "Peak for your competition. Focus strictly on the Big 3."
+            }
+        };
 
-    if (product) {
-        document.getElementById('detail-title').innerText = product.title;
-        document.getElementById('detail-price').innerText = product.price;
-        document.getElementById('detail-img').src = product.image;
-        document.getElementById('detail-desc').innerHTML = `<p>${product.desc}</p>`;
-    } else {
-        document.querySelector('.product-detail-container').innerHTML = "<h1>Product not found.</h1>";
-    }
+        // 3. Načítanie dát z URL
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+        const product = productsDatabase[productId];
 
-    // 4. PRIDANIE DO KOŠÍKA 
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
+        if (product) {
+            document.getElementById('detail-title').innerText = product.title;
+            document.getElementById('detail-price').innerText = product.price;
+            document.getElementById('detail-img').src = product.image;
+            document.getElementById('detail-desc').innerHTML = `<p>${product.desc}</p>`;
+        } else {
+            document.querySelector('.product-detail-container').innerHTML = "<h1>Product not found.</h1>";
+        }
+
+        // 4. Sledovanie prihláseného užívateľa
+        onAuthStateChanged(auth, (user) => {
+            currentUid = user ? user.uid : null;
+            updateCartBadgeUI();
+        });
+
+        // 5. Pridanie do košíka
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', () => {
+                if (!product) return;
+                
+                const cartKey = currentUid ? `cart_${currentUid}` : 'cart_guest';
+                let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                
+                cart.push(product);
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                
+                alert(`Added ${product.title} to your cart!`);
+                updateCartBadgeUI();
+            });
+        }
+
+        // 6. Aktualizácia čísla na ikonke košíka
+        function updateCartBadgeUI() {
+            const cartKey = currentUid ? `cart_${currentUid}` : 'cart_guest';
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            const badge = document.querySelector('.cart-quantity');
+            if (badge) {
+                badge.innerText = cart.length;
+                badge.style.display = cart.length > 0 ? 'flex' : 'none';
+            }
+        }
+    </script>
     
-    addToCartBtn.addEventListener('click', () => {
-        if(!product) return;
-
-        
-        let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
-        
-        
-        cart.push(product);
-        
-        
-        localStorage.setItem('trainwise_cart', JSON.stringify(cart));
-
-        
-        const originalText = addToCartBtn.innerText;
-        addToCartBtn.innerText = "✅ ADDED!";
-        addToCartBtn.style.backgroundColor = "white";
-        
-        setTimeout(() => {
-            addToCartBtn.innerText = originalText;
-            addToCartBtn.style.backgroundColor = "#FFD700";
-        }, 1500);
-        
-        updateCartBadge(); 
-    });
-
-    
-    function updateCartBadge() {
-        let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
-       
-        console.log("Cart items:", cart.length);
-    }
-</script>
+    <script type="module" src="navbar.js"></script>
 </body>
 </html>

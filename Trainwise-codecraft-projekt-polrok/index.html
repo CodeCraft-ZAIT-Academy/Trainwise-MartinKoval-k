@@ -41,9 +41,9 @@
        <div class="header-right">
     <a href="AboutUs.html" class="nav-btn">AboutUs</a>
     <a href="shoppage.html" class="nav-btn">shop</a>
-    <a href="Trainwise-app.html" class="nav-btn">app</a>
+    <a href="#" id="nav-training-app" class="nav-btn">Training App</a>
     
-    <a href="dashboard.html" class="nav-btn">Dashboard</a>
+    <a href="#" id="nav-dashboard" class="nav-btn">Dashboard</a>
     
     <a href="Login.html" class="nav-btn login-btn-with-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -177,7 +177,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        //  1. LOGIKA PRE CAROUSEL (premenujúdci obrazok)
+        //  1. LOGIKA PRE CAROUSEL 
         const carouselInner = document.querySelector('.carousel-inner');
         const carouselItems = document.querySelectorAll('.carousel-item');
         const timerProgress = document.querySelector('.timer-progress');
@@ -215,7 +215,7 @@
             overlay.classList.add('active');
         });
 
-        // Zatvorenie menu (funkcia)
+        // Zatvorenie menu 
         function closeMenu() {
             sidebar.classList.remove('active');
             overlay.classList.remove('active');

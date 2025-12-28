@@ -1,10 +1,8 @@
-// navbar.js
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// --- VLOŽ SEM SVOJ FIREBASE CONFIG ---
+// --- KONFIGURÁCIA ---
 const firebaseConfig = {
     apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
     authDomain: "trainwise-webapp.firebaseapp.com",
@@ -19,69 +17,62 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Elementy
-const accountBtn = document.querySelector('.login-btn-with-icon');
-const dashboardBtn = document.querySelector('a[href="dashboard.html"]'); 
+// --- POMOCNÁ FUNKCIA: ZÍSKANIE UNIKÁTNEHO KĽÚČA KOŠÍKA ---
+export function getCartKey() {
+    const user = auth.currentUser;
+    return user ? `cart_${user.uid}` : 'cart_guest';
+}
+
+// --- ELEMENTY Z NAVBARU ---
+const accountBtn = document.querySelector('.login-btn-with-icon'); 
+const dashboardBtn = document.getElementById('nav-dashboard');       
+const trainingAppBtn = document.getElementById('nav-training-app');  
+const cartBadge = document.querySelector('.cart-quantity');          
+
+// --- FUNKCIA: UPDATE IKONKY KOŠÍKA ---
+export function updateCartBadge() {
+    const key = getCartKey();
+    const cart = JSON.parse(localStorage.getItem(key)) || [];
+    if (cartBadge) {
+        cartBadge.innerText = cart.length;
+        cartBadge.style.display = cart.length > 0 ? 'flex' : 'none';
+    }
+}
+
+// --- POPUP REKLAMA ---
 const popup = document.getElementById('coach-popup');
 const closePopupBtn = document.querySelector('.close-popup');
 
-// Zatváranie Popupu (X)
-if(closePopupBtn) {
-    closePopupBtn.addEventListener('click', () => {
-        popup.style.display = 'none';
-    });
-}
-// Zatvorenie kliknutím mimo obrázok
-if(popup) {
-    popup.addEventListener('click', (e) => {
-        if(e.target === popup) popup.style.display = 'none';
-    });
+if(closePopupBtn) closePopupBtn.addEventListener('click', () => popup.style.display = 'none');
+if(popup) popup.addEventListener('click', (e) => { if(e.target === popup) popup.style.display = 'none'; });
+
+function openAd(e) {
+    e.preventDefault();
+    if(popup) popup.style.display = 'flex';
 }
 
-
-// ... (začiatok súboru ostáva rovnaký)
-
-// SPUSTÍ SA PRI NAČÍTANÍ STRÁNKY
+// --- HLAVNÁ FUNKCIA (AUTH STATE) ---
 onAuthStateChanged(auth, async (user) => {
     
-    // --- SCENÁR 1: UŽÍVATEĽ JE PRIHLÁSENÝ ---
+    updateCartBadge();
+
     if (user) {
-        console.log("Logged in as:", user.email);
-
         if(accountBtn) accountBtn.href = "account.html";
-
-        if(dashboardBtn) {
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                const role = docSnap.data().role;
-
-                // TOTO JE TÁ ZMENA:
-                if (role === 'coach') {
-                    // A) COACH -> Ide na Dashboard
-                    dashboardBtn.href = "dashboard.html";
-                    dashboardBtn.onclick = null; 
-                } 
-                else {
-                    // B) ATHLETE -> Ide do APKY (app.html)
-                    // Už žiadna reklama (popup), teraz majú svoju apku!
-                    dashboardBtn.href = "app.html"; 
-                    dashboardBtn.innerText = "Training App"; // Zmeníme aj text tlačidla
-                    dashboardBtn.onclick = null;
-                }
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const role = docSnap.data().role;
+            if (role === 'coach') {
+                if(dashboardBtn) { dashboardBtn.href = "dashboard.html"; dashboardBtn.onclick = null; }
+                if(trainingAppBtn) { trainingAppBtn.href = "app.html"; trainingAppBtn.onclick = null; }
+            } else {
+                if(dashboardBtn) { dashboardBtn.href = "app.html"; dashboardBtn.onclick = null; }
+                if(trainingAppBtn) { trainingAppBtn.href = "app.html"; trainingAppBtn.onclick = null; }
             }
         }
-
     } else {
-        // --- SCENÁR 2: UŽÍVATEĽ NIE JE PRIHLÁSENÝ (GUEST) ---
-        // ... (tento kód pre hosťa ostáva, tam reklamu necháme)
-        if(dashboardBtn) {
-            dashboardBtn.href = "#"; 
-            dashboardBtn.onclick = (e) => {
-                e.preventDefault();
-                if(popup) popup.style.display = 'flex';
-            };
-        }
+        if(dashboardBtn) { dashboardBtn.innerText = "Dashboard"; dashboardBtn.href = "#"; dashboardBtn.onclick = openAd; }
+        if(trainingAppBtn) { trainingAppBtn.innerText = "Training App"; trainingAppBtn.href = "#"; trainingAppBtn.onclick = openAd; }
     }
 });

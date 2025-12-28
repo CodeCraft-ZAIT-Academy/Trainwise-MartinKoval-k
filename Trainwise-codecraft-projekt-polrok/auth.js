@@ -1,7 +1,3 @@
-
-
-
-
 // 1. IMPORTY Z FIREBASE 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -25,9 +21,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
-
-
-// --- PREPÍNANIE SIGNUP / LOGIN ---
+//  PREPÍNANIE SIGNUP / LOGIN 
 const signupWrapper = document.getElementById('signup-form-wrapper');
 const loginWrapper = document.getElementById('login-form-wrapper');
 const showLoginBtn = document.getElementById('show-login');
@@ -48,7 +42,7 @@ if(showSignupBtn) {
     });
 }
 
-// --- 4. FUNKCIA: REGISTRÁCIA (SIGN UP) ---
+//  4. SIGN UP 
 const signupForm = document.getElementById('signup-form');
 if(signupForm) {
     signupForm.addEventListener('submit', async (e) => {
@@ -56,34 +50,31 @@ if(signupForm) {
         
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
-        // Zistíme, ktorú rolu si vybral
         const role = document.querySelector('input[name="role"]:checked').value;
         const btn = signupForm.querySelector('button');
 
         try {
             btn.innerText = "Creating account...";
             
-            // 1. Vytvoríme užívateľa v Auth
+            
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 2. Zapíšeme ROLU do databázy (Firestore)
-            // Vytvoríme dokument v kolekcii 'users' s ID užívateľa
+            
             await setDoc(doc(db, "users", user.uid), {
                 email: email,
-                role: role, // 'coach' alebo 'athlete'
+                role: role,
                 createdAt: new Date(),
-                
             });
 
             alert("Account created! Redirecting...");
             
-            // 3. Presmerovanie
             
-alert("Success! Redirecting to Home...");
-window.location.href = "index.html"; 
-
-
+            localStorage.removeItem('cart');
+            localStorage.removeItem('shoppingCart');
+            
+            // 4. Presmerovanie
+            window.location.href = "index.html"; 
 
         } catch (error) {
             alert("Error: " + error.message);
@@ -92,7 +83,7 @@ window.location.href = "index.html";
     });
 }
 
-// --- 5. FUNKCIA: PRIHLÁSENIE (LOGIN) ---
+//  5. LOGIN 
 const loginForm = document.getElementById('login-form');
 if(loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -109,22 +100,26 @@ if(loginForm) {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 2. Zistíme ROLU z databázy
+            // 2. Zistíme ROLU
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef);
+
+            
+            localStorage.removeItem('cart');
+            localStorage.removeItem('shoppingCart');
 
             if (docSnap.exists()) {
                 const userData = docSnap.data();
                 const role = userData.role;
 
-                // 3. Presmerovanie podľa roly
+                // 3. Presmerovanie podľa roly 
                 if(role === 'coach') {
                     window.location.href = "dashboard.html";
                 } else {
-                    window.location.href = "Trainwise-app.html";
+                   
+                    window.location.href = "app.html"; 
                 }
             } else {
-                // Ak v databáze nie je rola (napr. starý účet), pošleme ho na dashboard
                 window.location.href = "dashboard.html"; 
             }
 
@@ -135,9 +130,7 @@ if(loginForm) {
     });
 }
 
-// --- 6. GOOGLE LOGIN (Zatiaľ jednoduchý) ---
-// Poznámka: Pri Google logine nevieme hneď rolu, ak je to prvýkrát.
-// Zatiaľ to nastavíme tak, že Google login len prihlási.
+//  6. GOOGLE LOGIN 
 const provider = new GoogleAuthProvider();
 const googleLoginBtn = document.getElementById('google-login-btn');
 
@@ -147,25 +140,29 @@ if(googleLoginBtn) {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             
-            // Skontrolujeme, či už existuje v databáze
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef);
 
+           
+            localStorage.removeItem('cart');
+            localStorage.removeItem('shoppingCart');
+
             if (docSnap.exists()) {
-                // Už existuje -> Presmeruj
                 const role = docSnap.data().role;
-                if(role === 'coach') window.location.href = "dashboard.html";
-                else window.location.href = "Trainwise-app.html";
+                if(role === 'coach') {
+                    window.location.href = "dashboard.html";
+                } else {
+                    
+                    window.location.href = "app.html"; 
+                }
             } else {
-                // Nový Google užívateľ -> Musíme sa ho spýtať na rolu
-                // Pre jednoduchosť ho teraz hodíme na Dashboard a rolu nastavíme defaultne na 'athlete'
-                // V reálnej apke by si tu zobrazil okno: "Are you a Coach or Athlete?"
                 await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
-                    role: "athlete", // Default
+                    role: "athlete",
                     createdAt: new Date()
                 });
-                window.location.href = "Trainwise-app.html";
+                
+                window.location.href = "app.html"; 
             }
 
         } catch (error) {

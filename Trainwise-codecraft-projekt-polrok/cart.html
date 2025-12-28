@@ -48,61 +48,84 @@
         </div>
     </main>
 
-    <script>
-        // NAČÍTANIE KOŠÍKA
-        function loadCart() {
-            let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
-            const container = document.getElementById('cart-items-container');
-            const subtotalEl = document.getElementById('cart-subtotal');
-            const totalEl = document.getElementById('cart-total');
-            const checkoutBtn = document.getElementById('checkout-btn');
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-            container.innerHTML = ''; // Vyčistiť
-            let totalPrice = 0;
+    const firebaseConfig = {
+        apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
+        authDomain: "trainwise-webapp.firebaseapp.com",
+        projectId: "trainwise-webapp",
+        storageBucket: "trainwise-webapp.firebasestorage.app",
+        messagingSenderId: "644514176585",
+        appId: "1:644514176585:web:75dc6a6a11503ce7eb6998",
+        measurementId: "G-W09Q3PGNJ7"
+    };
 
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="color:white;">Your cart is empty. <a href="shoppage.html" style="color:#FFD700;">Go shopping</a></p>';
-                checkoutBtn.style.display = 'none';
-                subtotalEl.innerText = "0,00 €";
-                totalEl.innerText = "0,00 €";
-                return;
-            }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-            checkoutBtn.style.display = 'block';
+    // FUNKCIA NA ZÍSKANIE KĽÚČA
+    function getCartKey() {
+        const user = auth.currentUser;
+        return user ? `cart_${user.uid}` : 'cart_guest';
+    }
 
-           
-            cart.forEach((item, index) => {
-                totalPrice += item.rawPrice;
+    // NAČÍTANIE KOŠÍKA
+    window.loadCart = function() {
+        const key = getCartKey();
+        let cart = JSON.parse(localStorage.getItem(key)) || [];
+        const container = document.getElementById('cart-items-container');
+        const subtotalEl = document.getElementById('cart-subtotal');
+        const totalEl = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
 
-                const itemHTML = `
-                    <div class="cart-item">
-                        <img src="${item.image}" alt="${item.title}" class="cart-item-img">
-                        <div class="cart-item-info">
-                            <h4>${item.title}</h4>
-                            <p class="cart-item-price">${item.price}</p>
-                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-                        </div>
+        container.innerHTML = ''; 
+        let totalPrice = 0;
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p style="color:white;">Your cart is empty. <a href="shoppage.html" style="color:#FFD700;">Go shopping</a></p>';
+            checkoutBtn.style.display = 'none';
+            subtotalEl.innerText = "0,00 €";
+            totalEl.innerText = "0,00 €";
+            return;
+        }
+
+        checkoutBtn.style.display = 'block';
+
+        cart.forEach((item, index) => {
+            totalPrice += item.rawPrice;
+            const itemHTML = `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <h4>${item.title}</h4>
+                        <p class="cart-item-price">${item.price}</p>
+                        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
                     </div>
-                `;
-                container.innerHTML += itemHTML;
-            });
+                </div>
+            `;
+            container.innerHTML += itemHTML;
+        });
 
-            // Aktualizovanie ceny
-            subtotalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
-            totalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
-        }
+        subtotalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
+        totalEl.innerText = totalPrice.toFixed(2).replace('.', ',') + " €";
+    }
 
-        // ODSTRÁNENIE POLOŽKY
-        function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('trainwise_cart')) || [];
-            cart.splice(index, 1); // Vymazanie položky na danom indexe
-            localStorage.setItem('trainwise_cart', JSON.stringify(cart));
-            loadCart(); // Znova načítať
-        }
+    // ODSTRÁNENIE POLOŽKY
+    window.removeItem = function(index) {
+        const key = getCartKey();
+        let cart = JSON.parse(localStorage.getItem(key)) || [];
+        cart.splice(index, 1);
+        localStorage.setItem(key, JSON.stringify(cart));
+        loadCart(); 
+    }
 
-        // Spustiť pri načítaní
-        document.addEventListener('DOMContentLoaded', loadCart);
-    </script>
+    
+    onAuthStateChanged(auth, (user) => {
+        loadCart();
+    });
+</script>
 
 </body>
 </html>

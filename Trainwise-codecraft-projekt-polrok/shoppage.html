@@ -10,6 +10,7 @@
 <body style="background-color: black;"> 
 
 <div class="overlay" id="overlay"></div>
+
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <button class="close-btn" id="close-btn">&times;</button>
@@ -17,7 +18,7 @@
     <nav class="sidebar-links">
         <a href="AboutUs.html">About Us</a>
         <a href="shoppage.html">Shop</a>
-        <a href="Trainwise-app.html">App</a>
+        <a href="app.html">App</a>
         <a href="Login.html">Login</a>
         <a href="cart.html">Cart</a>
     </nav>
@@ -33,24 +34,24 @@
         <div class="header-center"> 
             <div class="logo"><a href="index.html"><img src="images/logo.png" alt="TR" class="header-logo"></a></div>
         </div>
-       <div class="header-right">
-    <a href="AboutUs.html" class="nav-btn">AboutUs</a>
-    <a href="shoppage.html" class="nav-btn">shop</a>
-    <a href="Trainwise-app.html" class="nav-btn">app</a>
+        <div class="header-right">
+            <a href="AboutUs.html" class="nav-btn">AboutUs</a>
+            <a href="shoppage.html" class="nav-btn">shop</a>
+            <a href="#" id="nav-training-app" class="nav-btn">Training App</a>
+            <a href="#" id="nav-dashboard" class="nav-btn">Dashboard</a>
     
-    <a href="dashboard.html" class="nav-btn">Dashboard</a>
-    
-    <a href="Login.html" class="nav-btn login-btn-with-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-        </svg>
-        <span>Account</span>
-    </a>  
+            <a href="Login.html" class="nav-btn login-btn-with-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                </svg>
+                <span>Account</span>
+            </a>  
 
-    <a href="cart.html" class="nav-btn cart-btn" style="padding: 5px 10px;">
-        <img src="images/cart-icon.png" alt="Cart" style="height: 22px; width: auto; vertical-align: middle;">
-    </a>
-</div>
+            <a href="cart.html" class="nav-btn cart-btn" style="padding: 5px 10px;">
+                <img src="images/cart-icon.png" alt="Cart" style="height: 22px; width: auto; vertical-align: middle;">
+                <span class="cart-quantity" style="display:none;">0</span>
+            </a>
+        </div>
     </header>
 
     <main class="content">
@@ -153,7 +154,7 @@
                 <div class="footer-column">
                     <h4>Product</h4>
                     <ul>
-                        <li><a href="Trainwise-app.html">Application</a></li>
+                        <li><a href="app.html">Application</a></li>
                         <li><a href="shoppage.html">Training Plans</a></li>
                         <li><a href="#">Pricing</a></li>
                         <li><a href="#">Features</a></li>
@@ -224,7 +225,6 @@
         cards.forEach(card => {
             const categories = card.dataset.category; 
             
-           
             if (categoryValue === 'all' || categories.includes(categoryValue)) {
                 card.style.display = 'flex'; // Zobraziť
             } else {
@@ -232,8 +232,6 @@
             }
         });
 
-        
-        
         const visibleCards = cards.filter(c => c.style.display !== 'none');
         
         if (priceValue === 'low-high') {
@@ -242,7 +240,6 @@
             cards.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
         }
         
-
         // Prekreslenie mriežky v novom poradí
         cards.forEach(card => grid.appendChild(card));
         

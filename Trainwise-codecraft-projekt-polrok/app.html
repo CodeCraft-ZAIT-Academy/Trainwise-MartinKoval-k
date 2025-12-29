@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="style2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Malé inline štýly len pre zoznam histórie (aby sa dalo mazať) */
+        .history-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #333;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #222;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #FF4444;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 5px;
+        }
+        .delete-btn:hover { text-decoration: underline; }
+    </style>
 </head>
 
 <body>
@@ -28,73 +54,90 @@
     <div class="app-container">
         
         <aside class="app-sidebar">
-            <a href="#" id="nav-home" class="sidebar-btn active">
-                <i class="fas fa-home sidebar-icon-fa"></i> <span>Home</span>
-            </a>
-            <a href="#" class="sidebar-btn">
+            <a href="#" id="nav-workouts" class="sidebar-btn active">
                 <i class="fas fa-dumbbell sidebar-icon-fa"></i> <span>Workouts</span>
             </a>
-            <a href="#" class="sidebar-btn">
+            <a href="#" id="nav-calendar" class="sidebar-btn">
                 <i class="fas fa-calendar-alt sidebar-icon-fa"></i> <span>Calendar</span>
             </a>
             <a href="#" id="nav-messages" class="sidebar-btn">
                 <i class="fas fa-comment-dots sidebar-icon-fa"></i> <span>Messages</span>
             </a>
-            <a href="#" class="sidebar-btn">
+            <a href="#" id="nav-exercises" class="sidebar-btn">
                 <i class="fas fa-running sidebar-icon-fa"></i> <span>Exercises</span>
             </a>
-            <a href="#" class="sidebar-btn">
+            <a href="#" id="nav-bodyweight" class="sidebar-btn">
                 <i class="fas fa-weight sidebar-icon-fa"></i> <span>Bodyweight</span>
             </a>
         </aside>
 
         <main class="app-content">
             
-            <div id="section-home">
+            <div id="section-workouts">
                 <div class="content-header">
-                    <h2 id="welcome-msg">Welcome, Athlete!</h2>
-                    <p class="subtitle">Ready to crush your goals today?</p>
+                    <h2 id="welcome-msg">Workouts</h2>
+                    <p class="subtitle">Your training plan.</p>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-label">Next Workout</span>
-                        <span class="stat-value" style="font-size: 1.5rem;">Upper Body Push</span>
-                        <span class="stat-change">Scheduled for Today</span>
+                <div id="invite-notification" class="dash-panel" style="display: none; background-color: #1a1a1a; border: 1px solid #FFD700; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h3 style="margin: 0; color: white; font-size: 1.1rem;">New Coach Invitation</h3>
+                            <p id="invite-text" style="margin: 5px 0 0; color: #ccc; font-size: 0.9rem;">Coach wants to connect.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="decline-btn" class="save-btn" style="background: transparent; border: 1px solid #FF4444; color: #FF4444; width: auto; padding: 8px 15px;">Decline</button>
+                            <button id="accept-btn" class="save-btn" style="background: #00FF88; color: black; width: auto; padding: 8px 20px;">Accept</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-panel" style="height: 300px; display: flex; align-items: center; justify-content: center; color: #444; border: 1px dashed #333;">
+                    <p>No workouts assigned yet.</p>
+                </div>
+            </div>
+
+            <div id="section-bodyweight" style="display: none;">
+                <div class="content-header">
+                    <h2>Bodyweight Tracker</h2>
+                    <p class="subtitle">Track your progress over time.</p>
+                </div>
+
+                <div class="glass-panel" style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                        <div style="flex-grow: 1;">
+                            <label style="color: #888; font-size: 12px; display: block; margin-bottom: 5px;">Current Weight (kg)</label>
+                            <input type="number" id="weight-input" placeholder="e.g. 85.5" step="0.1" 
+                                   style="width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 6px; font-size: 16px;">
+                        </div>
+                        <button onclick="logBodyweight()" style="padding: 12px 20px; background: #FFD700; color: black; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 18px;">
+                            LOG WEIGHT
+                        </button>
                     </div>
 
-                    <div id="invite-notification" class="dash-panel" style="display: none; background-color: #1a1a1a; border: 1px solid #FFD700; margin-top: 20px; animation: fadeIn 0.5s;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <div style="background: rgba(255, 215, 0, 0.2); padding: 10px; border-radius: 50%;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                </div>
-                                <div>
-                                    <h3 style="margin: 0; color: white; font-size: 1.1rem;">New Coach Invitation</h3>
-                                    <p id="invite-text" style="margin: 5px 0 0; color: #ccc; font-size: 0.9rem;">Coach wants to connect with you.</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 10px;">
-                                <button id="decline-btn" class="save-btn" style="background: transparent; border: 1px solid #FF4444; color: #FF4444; width: auto; padding: 8px 15px;">Decline</button>
-                                <button id="accept-btn" class="save-btn" style="background: #00FF88; color: black; width: auto; padding: 8px 20px;">Accept</button>
-                            </div>
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+                        <div>
+                            <span style="color: #666; font-size: 12px;">Starting</span>
+                            <div id="stat-start" style="color: white; font-weight: bold;">-- kg</div>
+                        </div>
+                        <div>
+                            <span style="color: #666; font-size: 12px;">Current</span>
+                            <div id="stat-current" style="color: #FFD700; font-weight: bold; font-size: 18px;">-- kg</div>
+                        </div>
+                        <div>
+                            <span style="color: #666; font-size: 12px;">Change</span>
+                            <div id="stat-change" style="color: white; font-weight: bold;">-- kg</div>
                         </div>
                     </div>
 
-                    <div class="stat-card">
-                        <span class="stat-label">Current Weight</span>
-                        <span class="stat-value">84.5 kg</span>
-                        <span class="stat-change positive">-0.5kg this week</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-label">Coach</span>
-                        <span class="stat-value" id="coach-status" style="font-size: 1.2rem; color: #666;">Not connected</span>
-                        <span class="stat-change" id="coach-action">Check messages for invites</span>
-                    </div>
-                </div>
+                    <div class="history-list" id="weight-history-list">
+                        </div>
 
-                <div class="dash-panel" style="margin-top: 30px; height: 300px; display: flex; align-items: center; justify-content: center; color: #444;">
-                    <p>Your weekly training stats will appear here.</p>
                 </div>
             </div>
 
@@ -119,6 +162,15 @@
                     </div>
                 </div>
             </div>
+            
+            <div id="section-calendar" style="display: none;">
+                <div class="content-header"><h2>Calendar</h2></div>
+                <p style="color:#666">Coming soon...</p>
+            </div>
+            <div id="section-exercises" style="display: none;">
+                <div class="content-header"><h2>Exercises</h2></div>
+                <p style="color:#666">Coming soon...</p>
+            </div>
 
         </main>
     </div>
@@ -126,7 +178,7 @@
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
@@ -145,22 +197,29 @@
     // --- ELEMENTY UI ---
     const headerProfileImg = document.getElementById('header-profile-img');
     const headerUserName = document.getElementById('header-username');
-    
     const welcomeMsg = document.getElementById('welcome-msg');
-    const coachStatus = document.getElementById('coach-status');
-    const coachAction = document.getElementById('coach-action');
     
+    // Notifikácia
     const inviteNotification = document.getElementById('invite-notification');
     const inviteText = document.getElementById('invite-text');
     const acceptBtn = document.getElementById('accept-btn');
     const declineBtn = document.getElementById('decline-btn');
 
-    const navHome = document.getElementById('nav-home');
+    // Navigácia
+    const navWorkouts = document.getElementById('nav-workouts');
+    const navBodyweight = document.getElementById('nav-bodyweight');
     const navMessages = document.getElementById('nav-messages');
-    const sectionHome = document.getElementById('section-home');
-    const sectionMessages = document.getElementById('section-messages');
+    const navCalendar = document.getElementById('nav-calendar');
+    const navExercises = document.getElementById('nav-exercises');
 
-    // Chat Elementy
+    // Sekcie
+    const sectionWorkouts = document.getElementById('section-workouts');
+    const sectionBodyweight = document.getElementById('section-bodyweight');
+    const sectionMessages = document.getElementById('section-messages');
+    const sectionCalendar = document.getElementById('section-calendar');
+    const sectionExercises = document.getElementById('section-exercises');
+
+    // Chat
     const chatCoachName = document.getElementById('chat-coach-name');
     const chatMessagesArea = document.getElementById('chat-messages-area');
     const chatForm = document.getElementById('chat-form');
@@ -171,40 +230,212 @@
     let pendingCoachId = null;  
     let myCoachId = null;       
     let unsubscribeChat = null; 
+    let myWeightChart = null; 
+    let currentWeightHistory = []; // Lokálne úložisko pre manipuláciu (mazanie)
 
-    // --- FUNKCIE PREPÍNANIA SEKCIÍ ---
-    function switchToHome() {
-        if(navMessages) navMessages.classList.remove('active');
-        if(navHome) navHome.classList.add('active');
+    // --- FUNKCIA PREPÍNANIA SEKCIÍ ---
+    function switchTab(activeBtn, showSection) {
+        // Reset active
+        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+        if(activeBtn) activeBtn.classList.add('active');
+
+        // Hide all
+        sectionWorkouts.style.display = 'none';
+        sectionBodyweight.style.display = 'none';
         sectionMessages.style.display = 'none';
-        sectionHome.style.display = 'block';
+        sectionCalendar.style.display = 'none';
+        sectionExercises.style.display = 'none';
+
+        // Show target
+        if(showSection) {
+            showSection.style.display = 'block';
+            // Špeciálny init pre chat
+            if(showSection === sectionMessages) initChat();
+        }
     }
 
-    function switchToMessages() {
-        if(navHome) navHome.classList.remove('active');
-        if(navMessages) navMessages.classList.add('active');
-        sectionHome.style.display = 'none';
-        sectionMessages.style.display = 'block';
-        initChat();
+    // Event Listeners pre navigáciu
+    if(navWorkouts) navWorkouts.addEventListener('click', (e) => { e.preventDefault(); switchTab(navWorkouts, sectionWorkouts); });
+    if(navBodyweight) navBodyweight.addEventListener('click', (e) => { e.preventDefault(); switchTab(navBodyweight, sectionBodyweight); });
+    if(navMessages) navMessages.addEventListener('click', (e) => { e.preventDefault(); switchTab(navMessages, sectionMessages); });
+    if(navCalendar) navCalendar.addEventListener('click', (e) => { e.preventDefault(); switchTab(navCalendar, sectionCalendar); });
+    if(navExercises) navExercises.addEventListener('click', (e) => { e.preventDefault(); switchTab(navExercises, sectionExercises); });
+
+
+    // --- BODYWEIGHT TRACKER ---
+    
+    // 1. Logovanie
+    window.logBodyweight = async function() {
+        const input = document.getElementById('weight-input');
+        const weightVal = parseFloat(input.value);
+        
+        if (!weightVal || weightVal <= 0) {
+            alert("Please enter a valid weight.");
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await updateDoc(userRef, {
+                    weightHistory: arrayUnion({
+                        date: new Date().toISOString(),
+                        weight: weightVal
+                    })
+                });
+                input.value = '';
+                loadWeightData(user.uid);
+                // alert("Weight logged!");
+            } catch (error) {
+                console.error("Error logging weight:", error);
+                alert("Error saving data.");
+            }
+        }
+    };
+
+    // 2. Mazanie záznamu
+    window.deleteWeightEntry = async function(index) {
+        if(!confirm("Delete this entry?")) return;
+
+        const user = auth.currentUser;
+        if(user) {
+            // Vymažeme z lokálneho poľa podľa indexu
+            currentWeightHistory.splice(index, 1);
+            
+            // Updatneme celé pole vo Firestore
+            const userRef = doc(db, "users", user.uid);
+            try {
+                await updateDoc(userRef, {
+                    weightHistory: currentWeightHistory
+                });
+                loadWeightData(user.uid); // Refresh
+            } catch(e) {
+                console.error(e);
+                alert("Error deleting.");
+            }
+        }
+    };
+
+    // 3. Načítanie a Vykreslenie
+    async function loadWeightData(userId) {
+        const userRef = doc(db, "users", userId);
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Uložíme do globálnej premennej pre mazanie
+            currentWeightHistory = data.weightHistory || [];
+
+            // Zoradiť pre graf (od najstaršieho)
+            // Vytvoríme kópiu poľa pre graf, aby sme nerozbili indexy mazania
+            let historyForGraph = [...currentWeightHistory];
+            historyForGraph.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const labels = historyForGraph.map(item => new Date(item.date).toLocaleDateString());
+            const weights = historyForGraph.map(item => item.weight);
+
+            // Update stats
+            if (weights.length > 0) {
+                const start = weights[0];
+                const current = weights[weights.length - 1];
+                const change = (current - start).toFixed(1);
+                
+                document.getElementById('stat-start').innerText = start + " kg";
+                document.getElementById('stat-current').innerText = current + " kg";
+                
+                const changeElem = document.getElementById('stat-change');
+                changeElem.innerText = (change > 0 ? "+" : "") + change + " kg";
+                changeElem.style.color = change < 0 ? "#00FF88" : (change > 0 ? "#FF4444" : "white"); 
+            } else {
+                 document.getElementById('stat-start').innerText = "-- kg";
+                 document.getElementById('stat-current').innerText = "-- kg";
+                 document.getElementById('stat-change').innerText = "-- kg";
+            }
+
+            renderChart(labels, weights);
+            renderHistoryList(currentWeightHistory); // Vykresliť zoznam na mazanie
+        }
     }
 
-    // --- EVENT LISTENER PRE MENU ---
-    if(navHome) {
-        navHome.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchToHome();
+    // 4. Vykreslenie Zoznamu na mazanie
+    function renderHistoryList(history) {
+        const listContainer = document.getElementById('weight-history-list');
+        listContainer.innerHTML = "";
+        
+        // Zoradíme od najnovšieho pre zoznam (aby posledné bolo hore)
+        // Musíme si pamätať pôvodný index pre mazanie, takže mapujeme
+        const mappedHistory = history.map((item, index) => ({ item, index }));
+        mappedHistory.sort((a, b) => new Date(b.item.date) - new Date(a.item.date));
+
+        if(mappedHistory.length === 0) {
+            listContainer.innerHTML = "<p style='text-align:center; padding:10px;'>No history yet.</p>";
+            return;
+        }
+
+        mappedHistory.forEach((obj) => {
+            const dateStr = new Date(obj.item.date).toLocaleString();
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <span>${dateStr}</span>
+                <span>
+                    <strong style="color: #FFD700; margin-right:10px;">${obj.item.weight} kg</strong>
+                    <button class="delete-btn" onclick="deleteWeightEntry(${obj.index})">X</button>
+                </span>
+            `;
+            listContainer.appendChild(div);
         });
     }
 
-    if(navMessages) {
-        navMessages.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchToMessages();
+    // 5. Graf
+    function renderChart(labels, data) {
+        const ctx = document.getElementById('weightChart').getContext('2d');
+        if (myWeightChart) myWeightChart.destroy();
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(255, 215, 0, 0.5)');
+        gradient.addColorStop(1, 'rgba(255, 215, 0, 0.0)');
+
+        myWeightChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Bodyweight',
+                    data: data,
+                    borderColor: '#FFD700',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#000',
+                    pointBorderColor: '#FFD700',
+                    pointRadius: 4,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111',
+                        titleColor: '#FFD700',
+                        bodyColor: '#FFF',
+                        borderColor: '#333',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    x: { grid: { color: '#222' }, ticks: { color: '#666' } },
+                    y: { grid: { color: '#222' }, ticks: { color: '#666' } }
+                }
+            }
         });
     }
 
-   
-    // --- AUTH LOGIKA ---
+    // --- AUTH & LOAD ---
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
             window.location.href = "Login.html";
@@ -214,56 +445,36 @@
 
             if (userSnap.exists()) {
                 const data = userSnap.data();
-                
-                
-               
-                
 
+                // 1. Nastavenie mena a fotky
+                if (data.name) headerUserName.innerText = data.name;
+                if (data.photoURL) headerProfileImg.src = `images/${data.photoURL}`;
+
+                // 2. Logika pre COACH vs ATHLETE
                 if (data.role === 'coach') {
-                    
-                    
+                    // Coach View
+                    welcomeMsg.innerText = `Workouts (Preview)`;
+                    // Coach nepotrebuje notifikácie
+                    if(inviteNotification) inviteNotification.style.display = 'none';
+                    // Skryť chat v menu
                     if(navMessages) navMessages.style.display = 'none';
-                    
-                   
-                    if (data.name) {
-                        headerUserName.innerText = data.name;
-                        welcomeMsg.innerText = `Coach View: ${data.name}`;
-                    }
-                    if (data.photoURL) headerProfileImg.src = `images/${data.photoURL}`;
 
-                   
-                    coachStatus.innerText = "Coach Mode 🛠️";
-                    coachStatus.style.color = "#FFD700";
-                    coachAction.innerText = "You are viewing the app as a user.";
-
-                } else if (data.role === 'athlete') {
-                   
-                    
-                    if (data.name) {
-                        headerUserName.innerText = data.name;
-                        welcomeMsg.innerText = `Let's go, ${data.name}!`;
-                    }
-                    if (data.photoURL) headerProfileImg.src = `images/${data.photoURL}`;
-
+                } else {
+                    // Athlete View
                     if (data.myCoachId) {
                         myCoachId = data.myCoachId; 
-                        coachStatus.innerText = "Connected ✅";
-                        coachStatus.style.color = "#00FF88";
-                        coachAction.innerText = "Check messages for updates";
                     } else {
                         checkInvitations(user.uid);
                     }
-
-                } else {
-                    
-                    window.location.href = "dashboard.html";
-                    return;
                 }
+
+                
+                loadWeightData(user.uid);
             }
         }
     });
 
-    // --- POZVÁNKY LOGIKA ---
+    // --- INVITES ---
     async function checkInvitations(athleteId) {
         const invitesRef = collection(db, "invitations");
         const q = query(invitesRef, where("toAthleteId", "==", athleteId), where("status", "==", "pending"));
@@ -276,6 +487,7 @@
             pendingCoachId = inviteData.fromCoachId;
             const coachName = inviteData.fromCoachName || "A Coach";
             inviteText.innerHTML = `<strong>${coachName}</strong> wants to be your coach.`;
+            // Zobrazíme to v sekcii Workouts
             inviteNotification.style.display = "block";
         }
     }
@@ -287,11 +499,7 @@
             const user = auth.currentUser;
             await updateDoc(doc(db, "users", user.uid), { myCoachId: pendingCoachId });
             await updateDoc(doc(db, "invitations", currentInviteId), { status: "accepted" });
-
             inviteNotification.style.display = "none";
-            coachStatus.innerText = "Connected ✅";
-            coachStatus.style.color = "#00FF88";
-            coachAction.innerText = "Invitation accepted!";
             myCoachId = pendingCoachId; 
             alert("Success! You are now connected with your Coach.");
         } catch (error) { console.error(error); alert("Error connecting."); }
@@ -307,10 +515,10 @@
         }
     });
 
-    // --- CHAT LOGIKA ---
+    // --- CHAT ---
     async function initChat() {
         if (!myCoachId) {
-            chatMessagesArea.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>You don't have a coach yet. Accept an invite on the Home screen.</p>";
+            chatMessagesArea.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>You don't have a coach yet.</p>";
             chatCoachName.innerText = "No Coach";
             chatForm.style.display = "none";
             leaveCoachBtn.style.display = "none";
@@ -335,16 +543,13 @@
 
         unsubscribeChat = onSnapshot(q, (snapshot) => {
             chatMessagesArea.innerHTML = "";
-            if (snapshot.empty) {
-                chatMessagesArea.innerHTML = "<p style='text-align:center; color:#444; margin-top:20px;'>No messages yet. Say hi! 👋</p>";
-            }
+            if (snapshot.empty) chatMessagesArea.innerHTML = "<p style='text-align:center; color:#444; margin-top:20px;'>No messages yet.</p>";
             snapshot.forEach(doc => {
                 const msg = doc.data();
                 const isMe = msg.senderId === myId;
                 const bubble = document.createElement('div');
                 bubble.classList.add('message-bubble');
                 bubble.classList.add(isMe ? 'me' : 'them');
-                
                 const date = msg.timestamp ? msg.timestamp.toDate() : new Date();
                 const timeStr = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
                 bubble.innerHTML = `${msg.text}<span class="msg-time">${timeStr}</span>`;
@@ -376,7 +581,6 @@
             } catch(e) { console.error(e); }
         }
     });
-
     </script>
 </body>
 </html>

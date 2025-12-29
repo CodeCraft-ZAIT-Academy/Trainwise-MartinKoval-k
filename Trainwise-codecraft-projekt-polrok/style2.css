@@ -373,7 +373,7 @@ body {
     word-wrap: break-word;
 }
 
-/* Správa odo mňa (vpravo, zlatá) */
+
 .message-bubble.me {
     align-self: flex-end;
     background: #FFD700;
@@ -381,7 +381,7 @@ body {
     border-bottom-right-radius: 2px;
 }
 
-/* Správa od druhého (vľavo, sivá) */
+
 .message-bubble.them {
     align-self: flex-start;
     background: #222;

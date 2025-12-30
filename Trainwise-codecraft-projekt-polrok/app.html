@@ -3,35 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trainwise - Athlete App</title>
+    <title>Trainwise - App</title>
     <link rel="stylesheet" href="style2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Malé inline štýly len pre zoznam histórie (aby sa dalo mazať) */
-        .history-list {
-            margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            border-top: 1px solid #333;
+        /* --- CALENDAR STYLES --- */
+        .calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .calendar-day-header { text-align: center; font-size: 0.8rem; color: #888; padding: 5px 0; }
+        
+        .calendar-day {
+            background: #111; border: 1px solid #333; min-height: 80px; border-radius: 8px;
+            padding: 5px; position: relative; cursor: pointer; display: flex; flex-direction: column; gap: 3px;
         }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #222;
-            color: #ccc;
-            font-size: 0.9rem;
+        .calendar-day:hover { border-color: #555; }
+        .calendar-day.today { border: 1px solid #FFD700; background: rgba(255, 215, 0, 0.05); }
+        .day-number { font-size: 0.8rem; color: #666; align-self: flex-end; margin-bottom: 2px; }
+        
+        .event-pill {
+            background: #222; border-left: 2px solid #FFD700; color: #ccc;
+            font-size: 0.7rem; padding: 2px 4px; border-radius: 2px;
+            overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
         }
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #FF4444;
-            cursor: pointer;
-            font-weight: bold;
-            padding: 0 5px;
-        }
-        .delete-btn:hover { text-decoration: underline; }
+        .event-pill.self { border-left-color: #00FF88; }
+        
+        #workout-main-view { display: block; }
+        #workout-logger-view { display: none; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .logger-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        .meta-panel { background: #111; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+        .meta-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .meta-input { background: #000; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 8px; width: 100%; font-size: 0.95rem; color-scheme: dark; }
+
+        .exercise-card { background: #161616; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
+        .ex-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; background: #202020; }
+        .ex-name { color: #FFD700; font-weight: bold; font-size: 1.1rem; }
+        .btn-ex-opt { background: none; border: none; color: #FF4444; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
+
+        .set-header-row { display: grid; grid-template-columns: 40px 1fr 1fr 1fr 40px; padding: 10px 15px; background: #0a0a0a; color: #888; font-size: 0.75rem; text-align: center; font-weight: bold; letter-spacing: 1px; }
+        .set-row { display: grid; grid-template-columns: 40px 1fr 1fr 1fr 40px; padding: 12px 15px; align-items: center; border-bottom: 1px solid #222; }
+        .set-row:last-child { border-bottom: none; }
+        .unilateral-pair { border-left: 3px solid #FFD700; background: rgba(255, 215, 0, 0.03); }
+        .set-num { color: #ccc; font-size: 0.9rem; text-align: center; background: #333; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+        .set-input { background: transparent; border: none; border-bottom: 1px solid #444; color: white; text-align: center; font-size: 1.1rem; width: 80%; margin: 0 auto; padding: 5px; font-weight: bold; }
+        .rir-select { background: #111; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 4px; text-align: center; width: 80%; margin: 0 auto; }
+        .btn-add-set { width: 100%; padding: 12px; background: #222; border: none; color: #ccc; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.2s; }
+        .btn-add-set:hover { background: #333; color: #FFD700; }
+        .btn-add-exercise { width: 100%; padding: 15px; background: rgba(255, 215, 0, 0.05); color: #FFD700; border: 1px dashed #FFD700; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-del-set { background: none; border: none; color: #555; cursor: pointer; font-size: 1.2rem; }
+        .btn-del-set:hover { color: #FF4444; }
+
+        .library-controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .lib-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, border-color 0.2s; position: relative; }
+        .lib-card:hover { transform: translateY(-3px); border-color: #555; }
+        .lib-icon { width: 40px; height: 40px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #FFD700; font-size: 1.2rem; margin-bottom: 10px; }
+        .lib-title { font-weight: bold; color: white; font-size: 1rem; margin-bottom: 5px; }
+        .lib-cat { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; background: #000; padding: 3px 8px; border-radius: 4px; }
+        .lib-del { position: absolute; top: 10px; right: 10px; color: #444; background: none; border: none; cursor: pointer; }
+        .lib-del:hover { color: #FF4444; }
+
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; }
+        .modal-box { background: #111; border: 1px solid #FFD700; width: 90%; max-width: 500px; display: flex; flex-direction: column; border-radius: 15px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+        .modal-header { padding: 15px 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 20px; overflow-y: auto; max-height: 70vh; }
+
+        .selector-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .selector-item:hover { background: #1a1a1a; padding-left: 20px; }
+        .selector-item span:first-child { color: white; font-weight: bold; }
+
+        .history-card { background: #111; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid #333; position: relative; display: flex; justify-content: space-between; align-items: center; }
+        .hist-date { color: #fff; font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
+        .hist-stats { color: #888; font-size: 0.9rem; }
+        .hist-actions { display: flex; gap: 15px; }
+        .hist-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
+        .hist-btn.edit { color: #444; } .hist-btn.edit:hover { color: #FFD700; }
+        .hist-btn.del { color: #444; } .hist-btn.del:hover { color: #FF4444; }
+
+        
+        .popup-content { position: relative; width: 100%; max-width: 500px; text-align: center; animation: popIn 0.3s ease-out; }
+        .promo-img { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); display: block; }
+        .close-popup { position: absolute; top: -40px; right: 0; font-size: 40px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .close-popup:hover { color: #FFD700; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
     </style>
 </head>
 
@@ -44,7 +102,7 @@
         </a>
 
         <div class="header-right">
-            <span id="header-username" class="user-name"></span>
+            <span id="header-username" class="user-name">Loading...</span>
             <a href="account.html" class="profile-link">
                 <img id="header-profile-img" src="images/avatar-19.png" alt="Profile" class="header-avatar">
             </a>
@@ -74,102 +132,186 @@
         <main class="app-content">
             
             <div id="section-workouts">
-                <div class="content-header">
-                    <h2 id="welcome-msg">Workouts</h2>
-                    <p class="subtitle">Your training plan.</p>
-                </div>
-
-                <div id="invite-notification" class="dash-panel" style="display: none; background-color: #1a1a1a; border: 1px solid #FFD700; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div id="workout-main-view">
+                    <div class="content-header" style="display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <h3 style="margin: 0; color: white; font-size: 1.1rem;">New Coach Invitation</h3>
-                            <p id="invite-text" style="margin: 5px 0 0; color: #ccc; font-size: 0.9rem;">Coach wants to connect.</p>
+                            <h2 id="welcome-msg">Workouts</h2>
+                            <p class="subtitle">Your training log.</p>
                         </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button id="decline-btn" class="save-btn" style="background: transparent; border: 1px solid #FF4444; color: #FF4444; width: auto; padding: 8px 15px;">Decline</button>
-                            <button id="accept-btn" class="save-btn" style="background: #00FF88; color: black; width: auto; padding: 8px 20px;">Accept</button>
-                        </div>
+                        <button onclick="startLogger()" class="save-btn" style="width:auto; padding: 10px 25px;">+ LOG WORKOUT</button>
+                    </div>
+                    <div id="invite-notification" class="dash-panel" style="display: none; background-color: #1a1a1a; border: 1px solid #FFD700; margin-bottom: 20px;"></div>
+                    <div id="workout-history-list">
+                        <p style="text-align:center; color:#666; margin-top:50px;">Loading history...</p>
                     </div>
                 </div>
 
-                <div class="dash-panel" style="height: 300px; display: flex; align-items: center; justify-content: center; color: #444; border: 1px dashed #333;">
-                    <p>No workouts assigned yet.</p>
+                <div id="workout-logger-view">
+                    <div class="logger-header">
+                        <button onclick="cancelLogger()" style="background:none; border:none; color:#888; font-size:1rem; cursor:pointer; font-weight:bold;">Cancel</button>
+                        <h2 style="margin:0; font-size:1.4rem; color: #FFD700; text-transform:uppercase;">Current Workout</h2>
+                        <button onclick="saveWorkout()" class="save-btn" style="width:auto; padding: 8px 25px; font-size:0.9rem;">FINISH</button>
+                    </div>
+                    <div class="meta-panel">
+                        <div class="meta-row">
+                            <div style="flex:1;">
+                                <label style="font-size:0.75rem; color:#888; text-transform:uppercase;">Start Time</label>
+                                <input type="datetime-local" id="log-date" class="meta-input">
+                            </div>
+                            <div style="flex:1;">
+                                <label style="font-size:0.75rem; color:#888; text-transform:uppercase;">Duration (min)</label>
+                                <input type="number" id="log-duration" class="meta-input" placeholder="0">
+                            </div>
+                        </div>
+                        <input type="text" id="log-note" class="meta-input" placeholder="Workout Note...">
+                    </div>
+                    <div id="logged-exercises-container">
+                        <p style="text-align:center; color:#444; padding: 30px; border: 1px dashed #333; border-radius: 12px;">
+                            No exercises yet.<br>Tap below to add one.
+                        </p>
+                    </div>
+                    <button onclick="openExerciseSelector()" class="btn-add-exercise">+ Add Exercise</button>
+                </div>
+            </div>
+
+            <div id="exercise-selector-modal" class="modal-overlay">
+                <div class="modal-box">
+                    <div class="modal-header">
+                        <h3 style="margin:0; color:white;">Select Exercise</h3>
+                        <span onclick="closeExerciseSelector()" style="cursor:pointer; font-size:24px; color:#666;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="display:flex; flex-direction:column;">
+                        <input type="text" id="search-exercise" placeholder="Search exercise..." class="meta-input" style="margin-bottom:15px;">
+                        <div id="library-list">
+                            <p style="color:#666; text-align:center;">Loading...</p>
+                        </div>
+                        <button onclick="openCreateExModal()" class="save-btn" style="margin-top:15px; background:#222; color:#888;">+ Create New</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="create-ex-modal" class="modal-overlay">
+                <div class="modal-box" style="max-width:400px;">
+                    <div class="modal-header">
+                        <h3 style="margin:0; color:white;">Create New Exercise</h3>
+                        <span onclick="closeCreateExModal()" style="cursor:pointer; font-size:24px; color:#666;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="display:flex; flex-direction:column; gap:15px;">
+                        <input type="text" id="global-ex-name" placeholder="Exercise Name" class="meta-input">
+                        <select id="global-ex-cat" class="meta-input">
+                            <option value="Chest">Chest</option>
+                            <option value="Back">Back</option>
+                            <option value="Legs">Legs</option>
+                            <option value="Shoulders">Shoulders</option>
+                            <option value="Arms">Arms</option>
+                            <option value="Abs">Abs</option>
+                            <option value="Cardio">Cardio</option>
+                        </select>
+                        <button onclick="saveNewExerciseGlobal()" class="save-btn">Create</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="coach-promo-modal" class="modal-overlay">
+                <div class="popup-content">
+                    <span class="close-popup" onclick="closePromo()">&times;</span>
+                    <img src="images/promo.png" alt="Coach Promo" class="promo-img">
+                </div>
+            </div>
+
+            <div id="add-event-modal" class="modal-overlay">
+                <div class="modal-box" style="max-width:400px;">
+                    <div class="modal-header">
+                        <h3 style="margin:0; color:white;">Plan Workout</h3>
+                        <span onclick="closeAddEventModal()" style="cursor:pointer; font-size:24px; color:#666;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="display:flex; flex-direction:column; gap:15px;">
+                        <input type="text" id="cal-event-title" placeholder="Workout Title (e.g. Leg Day)" class="meta-input">
+                        <textarea id="cal-event-note" placeholder="Notes (optional)..." class="meta-input" rows="3"></textarea>
+                        <input type="hidden" id="cal-event-date">
+                        <button onclick="saveCalendarEvent()" class="save-btn">Save to Calendar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="event-detail-modal" class="modal-overlay">
+                <div class="modal-box" style="max-width:400px;">
+                    <div class="modal-header">
+                        <h3 style="margin:0; color:white;">Workout Details</h3>
+                        <span onclick="document.getElementById('event-detail-modal').style.display='none'" style="cursor:pointer; font-size:24px; color:#666;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="color: #ccc;">
+                        <h2 id="detail-title" style="color:#FFD700; margin-top:0;"></h2>
+                        <p id="detail-note" style="background:#222; padding:10px; border-radius:6px;"></p>
+                        <small id="detail-by" style="color:#666; display:block; margin-top:10px;"></small>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="section-exercises" style="display: none;">
+                <div class="content-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><h2>Exercise Library</h2><p class="subtitle">Manage your exercises collection.</p></div>
+                    <button onclick="openCreateExModal()" class="save-btn" style="width:auto; padding: 10px 20px;">+ NEW EXERCISE</button>
+                </div>
+                <div class="library-controls">
+                    <input type="text" id="main-lib-search" placeholder="Search exercises..." class="meta-input" style="flex:2;">
+                    <select id="main-lib-filter" class="meta-input" style="flex:1;">
+                        <option value="All">All</option>
+                        <option value="Chest">Chest</option>
+                        <option value="Back">Back</option>
+                        <option value="Legs">Legs</option>
+                        <option value="Shoulders">Shoulders</option>
+                        <option value="Arms">Arms</option>
+                        <option value="Abs">Abs</option>
+                        <option value="Cardio">Cardio</option>
+                    </select>
+                </div>
+                <div id="main-library-grid" class="library-grid"><p style="text-align:center; color:#666; grid-column: 1/-1;">Loading library...</p></div>
+            </div>
+
+            <div id="section-calendar" style="display: none;">
+                <div class="content-header">
+                    <h2>Training Calendar</h2>
+                    <p class="subtitle">Your scheduled sessions.</p>
+                </div>
+                <div class="dash-panel" style="border: 1px solid #333;">
+                    <div class="calendar-controls">
+                        <button onclick="prevMonth()" class="save-btn" style="width:auto; padding:5px 15px;"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="calendar-month-year" style="margin:0; color:white;">Month Year</h3>
+                        <button onclick="nextMonth()" class="save-btn" style="width:auto; padding:5px 15px;"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(7,1fr); text-align:center; color:#888; font-size:0.8rem; padding-bottom:10px;">
+                        <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid"></div>
                 </div>
             </div>
 
             <div id="section-bodyweight" style="display: none;">
-                <div class="content-header">
-                    <h2>Bodyweight Tracker</h2>
-                    <p class="subtitle">Track your progress over time.</p>
-                </div>
-
+                <div class="content-header"><h2>Bodyweight</h2><p class="subtitle">Track your weight.</p></div>
                 <div class="glass-panel" style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-                    
                     <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
-                        <div style="flex-grow: 1;">
-                            <label style="color: #888; font-size: 12px; display: block; margin-bottom: 5px;">Current Weight (kg)</label>
-                            <input type="number" id="weight-input" placeholder="e.g. 85.5" step="0.1" 
-                                   style="width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 6px; font-size: 16px;">
-                        </div>
-                        <button onclick="logBodyweight()" style="padding: 12px 20px; background: #FFD700; color: black; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 18px;">
-                            LOG WEIGHT
-                        </button>
+                        <div style="flex-grow: 1;"><label style="color: #888; font-size: 12px; display: block; margin-bottom: 5px;">Current Weight (kg)</label><input type="number" id="weight-input" placeholder="e.g. 85.5" step="0.1" class="meta-input"></div>
+                        <button onclick="logBodyweight()" class="save-btn" style="width: auto; padding: 10px 20px; height: 42px; margin-top: 19px;">LOG</button>
                     </div>
-
-                    <div style="position: relative; height: 300px; width: 100%;">
-                        <canvas id="weightChart"></canvas>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
-                        <div>
-                            <span style="color: #666; font-size: 12px;">Starting</span>
-                            <div id="stat-start" style="color: white; font-weight: bold;">-- kg</div>
-                        </div>
-                        <div>
-                            <span style="color: #666; font-size: 12px;">Current</span>
-                            <div id="stat-current" style="color: #FFD700; font-weight: bold; font-size: 18px;">-- kg</div>
-                        </div>
-                        <div>
-                            <span style="color: #666; font-size: 12px;">Change</span>
-                            <div id="stat-change" style="color: white; font-weight: bold;">-- kg</div>
-                        </div>
-                    </div>
-
-                    <div class="history-list" id="weight-history-list">
-                        </div>
-
+                    <div style="position: relative; height: 300px; width: 100%;"><canvas id="weightChart"></canvas></div>
+                    <div class="history-list" id="weight-history-list" style="margin-top:20px; border-top:1px solid #333;"></div>
                 </div>
             </div>
 
             <div id="section-messages" style="display: none;">
-                <div class="content-header">
-                    <h2>Messages</h2>
-                    <p class="subtitle">Chat with your Coach.</p>
-                </div>
+                <div class="content-header"><h2>Messages</h2></div>
                 <div class="chat-layout">
                     <div class="chat-window" style="width: 100%;">
-                        <div class="chat-header-bar">
-                            <span id="chat-coach-name">Loading Coach...</span>
-                            <button id="leave-coach-btn" class="delete-connection-btn" style="display: none;">Leave Coach</button>
-                        </div>
-                        <div class="chat-messages-area" id="chat-messages-area">
-                            <p style="text-align:center; padding:20px; color:#666;">Loading messages...</p>
-                        </div>
+                        <div class="chat-header-bar"><span id="chat-coach-name">Loading...</span><button id="leave-coach-btn" class="delete-connection-btn" style="display: none;">Disconnect</button></div>
+                        <div class="chat-messages-area" id="chat-messages-area"></div>
                         <form class="chat-input-area" id="chat-form" style="display: none;">
-                            <input type="text" id="chat-input" class="chat-input" placeholder="Message your coach..." autocomplete="off">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="Message..." autocomplete="off">
                             <button type="submit" class="chat-send-btn">➤</button>
                         </form>
                     </div>
                 </div>
-            </div>
-            
-            <div id="section-calendar" style="display: none;">
-                <div class="content-header"><h2>Calendar</h2></div>
-                <p style="color:#666">Coming soon...</p>
-            </div>
-            <div id="section-exercises" style="display: none;">
-                <div class="content-header"><h2>Exercises</h2></div>
-                <p style="color:#666">Coming soon...</p>
             </div>
 
         </main>
@@ -178,7 +320,7 @@
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
@@ -194,393 +336,357 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- ELEMENTY UI ---
-    const headerProfileImg = document.getElementById('header-profile-img');
-    const headerUserName = document.getElementById('header-username');
-    const welcomeMsg = document.getElementById('welcome-msg');
+    // STATE
+    let currentWorkoutExercises = [];
+    let myWeightChart = null;
+    let currentWeightHistory = [];
+    let myCoachId = null;
+    let currentUserRole = null;
+    let unsubscribeChat = null;
+    let editingWorkoutId = null;
     
-    // Notifikácia
-    const inviteNotification = document.getElementById('invite-notification');
-    const inviteText = document.getElementById('invite-text');
-    const acceptBtn = document.getElementById('accept-btn');
-    const declineBtn = document.getElementById('decline-btn');
-
-    // Navigácia
-    const navWorkouts = document.getElementById('nav-workouts');
-    const navBodyweight = document.getElementById('nav-bodyweight');
-    const navMessages = document.getElementById('nav-messages');
-    const navCalendar = document.getElementById('nav-calendar');
-    const navExercises = document.getElementById('nav-exercises');
-
-    // Sekcie
-    const sectionWorkouts = document.getElementById('section-workouts');
-    const sectionBodyweight = document.getElementById('section-bodyweight');
-    const sectionMessages = document.getElementById('section-messages');
-    const sectionCalendar = document.getElementById('section-calendar');
-    const sectionExercises = document.getElementById('section-exercises');
-
-    // Chat
-    const chatCoachName = document.getElementById('chat-coach-name');
-    const chatMessagesArea = document.getElementById('chat-messages-area');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const leaveCoachBtn = document.getElementById('leave-coach-btn');
-
-    let currentInviteId = null; 
-    let pendingCoachId = null;  
-    let myCoachId = null;       
-    let unsubscribeChat = null; 
-    let myWeightChart = null; 
-    let currentWeightHistory = []; // Lokálne úložisko pre manipuláciu (mazanie)
-
-    // --- FUNKCIA PREPÍNANIA SEKCIÍ ---
-    function switchTab(activeBtn, showSection) {
-        // Reset active
-        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-        if(activeBtn) activeBtn.classList.add('active');
-
-        // Hide all
-        sectionWorkouts.style.display = 'none';
-        sectionBodyweight.style.display = 'none';
-        sectionMessages.style.display = 'none';
-        sectionCalendar.style.display = 'none';
-        sectionExercises.style.display = 'none';
-
-        // Show target
-        if(showSection) {
-            showSection.style.display = 'block';
-            // Špeciálny init pre chat
-            if(showSection === sectionMessages) initChat();
-        }
-    }
-
-    // Event Listeners pre navigáciu
-    if(navWorkouts) navWorkouts.addEventListener('click', (e) => { e.preventDefault(); switchTab(navWorkouts, sectionWorkouts); });
-    if(navBodyweight) navBodyweight.addEventListener('click', (e) => { e.preventDefault(); switchTab(navBodyweight, sectionBodyweight); });
-    if(navMessages) navMessages.addEventListener('click', (e) => { e.preventDefault(); switchTab(navMessages, sectionMessages); });
-    if(navCalendar) navCalendar.addEventListener('click', (e) => { e.preventDefault(); switchTab(navCalendar, sectionCalendar); });
-    if(navExercises) navExercises.addEventListener('click', (e) => { e.preventDefault(); switchTab(navExercises, sectionExercises); });
-
-
-    // --- BODYWEIGHT TRACKER ---
-    
-    // 1. Logovanie
-    window.logBodyweight = async function() {
-        const input = document.getElementById('weight-input');
-        const weightVal = parseFloat(input.value);
-        
-        if (!weightVal || weightVal <= 0) {
-            alert("Please enter a valid weight.");
-            return;
-        }
-
-        const user = auth.currentUser;
-        if (user) {
-            const userRef = doc(db, "users", user.uid);
-            try {
-                await updateDoc(userRef, {
-                    weightHistory: arrayUnion({
-                        date: new Date().toISOString(),
-                        weight: weightVal
-                    })
-                });
-                input.value = '';
-                loadWeightData(user.uid);
-                // alert("Weight logged!");
-            } catch (error) {
-                console.error("Error logging weight:", error);
-                alert("Error saving data.");
-            }
-        }
-    };
-
-    // 2. Mazanie záznamu
-    window.deleteWeightEntry = async function(index) {
-        if(!confirm("Delete this entry?")) return;
-
-        const user = auth.currentUser;
-        if(user) {
-            // Vymažeme z lokálneho poľa podľa indexu
-            currentWeightHistory.splice(index, 1);
-            
-            // Updatneme celé pole vo Firestore
-            const userRef = doc(db, "users", user.uid);
-            try {
-                await updateDoc(userRef, {
-                    weightHistory: currentWeightHistory
-                });
-                loadWeightData(user.uid); // Refresh
-            } catch(e) {
-                console.error(e);
-                alert("Error deleting.");
-            }
-        }
-    };
-
-    // 3. Načítanie a Vykreslenie
-    async function loadWeightData(userId) {
-        const userRef = doc(db, "users", userId);
-        const docSnap = await getDoc(userRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            // Uložíme do globálnej premennej pre mazanie
-            currentWeightHistory = data.weightHistory || [];
-
-            // Zoradiť pre graf (od najstaršieho)
-            // Vytvoríme kópiu poľa pre graf, aby sme nerozbili indexy mazania
-            let historyForGraph = [...currentWeightHistory];
-            historyForGraph.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const labels = historyForGraph.map(item => new Date(item.date).toLocaleDateString());
-            const weights = historyForGraph.map(item => item.weight);
-
-            // Update stats
-            if (weights.length > 0) {
-                const start = weights[0];
-                const current = weights[weights.length - 1];
-                const change = (current - start).toFixed(1);
-                
-                document.getElementById('stat-start').innerText = start + " kg";
-                document.getElementById('stat-current').innerText = current + " kg";
-                
-                const changeElem = document.getElementById('stat-change');
-                changeElem.innerText = (change > 0 ? "+" : "") + change + " kg";
-                changeElem.style.color = change < 0 ? "#00FF88" : (change > 0 ? "#FF4444" : "white"); 
-            } else {
-                 document.getElementById('stat-start').innerText = "-- kg";
-                 document.getElementById('stat-current').innerText = "-- kg";
-                 document.getElementById('stat-change').innerText = "-- kg";
-            }
-
-            renderChart(labels, weights);
-            renderHistoryList(currentWeightHistory); // Vykresliť zoznam na mazanie
-        }
-    }
-
-    // 4. Vykreslenie Zoznamu na mazanie
-    function renderHistoryList(history) {
-        const listContainer = document.getElementById('weight-history-list');
-        listContainer.innerHTML = "";
-        
-        // Zoradíme od najnovšieho pre zoznam (aby posledné bolo hore)
-        // Musíme si pamätať pôvodný index pre mazanie, takže mapujeme
-        const mappedHistory = history.map((item, index) => ({ item, index }));
-        mappedHistory.sort((a, b) => new Date(b.item.date) - new Date(a.item.date));
-
-        if(mappedHistory.length === 0) {
-            listContainer.innerHTML = "<p style='text-align:center; padding:10px;'>No history yet.</p>";
-            return;
-        }
-
-        mappedHistory.forEach((obj) => {
-            const dateStr = new Date(obj.item.date).toLocaleString();
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.innerHTML = `
-                <span>${dateStr}</span>
-                <span>
-                    <strong style="color: #FFD700; margin-right:10px;">${obj.item.weight} kg</strong>
-                    <button class="delete-btn" onclick="deleteWeightEntry(${obj.index})">X</button>
-                </span>
-            `;
-            listContainer.appendChild(div);
-        });
-    }
-
-    // 5. Graf
-    function renderChart(labels, data) {
-        const ctx = document.getElementById('weightChart').getContext('2d');
-        if (myWeightChart) myWeightChart.destroy();
-
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(255, 215, 0, 0.5)');
-        gradient.addColorStop(1, 'rgba(255, 215, 0, 0.0)');
-
-        myWeightChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Bodyweight',
-                    data: data,
-                    borderColor: '#FFD700',
-                    backgroundColor: gradient,
-                    borderWidth: 2,
-                    pointBackgroundColor: '#000',
-                    pointBorderColor: '#FFD700',
-                    pointRadius: 4,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#111',
-                        titleColor: '#FFD700',
-                        bodyColor: '#FFF',
-                        borderColor: '#333',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    x: { grid: { color: '#222' }, ticks: { color: '#666' } },
-                    y: { grid: { color: '#222' }, ticks: { color: '#666' } }
-                }
-            }
-        });
-    }
+    // CALENDAR STATE
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let calendarEvents = [];
 
     // --- AUTH & LOAD ---
     onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.href = "Login.html";
-        } else {
+        if (!user) window.location.href = "Login.html";
+        else {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
                 const data = userSnap.data();
+                if (data.name) document.getElementById('header-username').innerText = data.name;
+                if (data.photoURL) document.getElementById('header-profile-img').src = `images/${data.photoURL}`;
+                
+                currentUserRole = data.role; 
 
-                // 1. Nastavenie mena a fotky
-                if (data.name) headerUserName.innerText = data.name;
-                if (data.photoURL) headerProfileImg.src = `images/${data.photoURL}`;
-
-                // 2. Logika pre COACH vs ATHLETE
                 if (data.role === 'coach') {
-                    // Coach View
-                    welcomeMsg.innerText = `Workouts (Preview)`;
-                    // Coach nepotrebuje notifikácie
-                    if(inviteNotification) inviteNotification.style.display = 'none';
-                    // Skryť chat v menu
-                    if(navMessages) navMessages.style.display = 'none';
-
+                    document.getElementById('welcome-msg').innerText = "Coach Workouts";
+                    document.getElementById('welcome-msg').style.color = "#FFD700";
+                    const msgBtn = document.getElementById('nav-messages');
+                    if(msgBtn) msgBtn.style.display = 'none';
                 } else {
-                    // Athlete View
-                    if (data.myCoachId) {
-                        myCoachId = data.myCoachId; 
-                    } else {
-                        checkInvitations(user.uid);
+                    if (data.myCoachId) myCoachId = data.myCoachId; 
+                    else checkInvitations(user.uid);
+                    
+                    if(!sessionStorage.getItem('promoSeen')) {
+                         document.getElementById('coach-promo-modal').style.display = 'flex';
+                         sessionStorage.setItem('promoSeen', 'true');
                     }
                 }
 
-                
+                loadHistory(user.uid);
                 loadWeightData(user.uid);
+                loadMainLibrary(user.uid);
+                initCalendar(user.uid); // START CALENDAR
             }
         }
     });
 
-    // --- INVITES ---
-    async function checkInvitations(athleteId) {
-        const invitesRef = collection(db, "invitations");
-        const q = query(invitesRef, where("toAthleteId", "==", athleteId), where("status", "==", "pending"));
-        const querySnapshot = await getDocs(q);
+    window.closePromo = function() { document.getElementById('coach-promo-modal').style.display = 'none'; };
 
-        if (!querySnapshot.empty) {
-            const inviteDoc = querySnapshot.docs[0];
-            const inviteData = inviteDoc.data();
-            currentInviteId = inviteDoc.id;
-            pendingCoachId = inviteData.fromCoachId;
-            const coachName = inviteData.fromCoachName || "A Coach";
-            inviteText.innerHTML = `<strong>${coachName}</strong> wants to be your coach.`;
-            // Zobrazíme to v sekcii Workouts
-            inviteNotification.style.display = "block";
+    // --- NAVIGATION ---
+    const navs = {
+        workouts: document.getElementById('nav-workouts'),
+        calendar: document.getElementById('nav-calendar'),
+        messages: document.getElementById('nav-messages'),
+        exercises: document.getElementById('nav-exercises'),
+        bodyweight: document.getElementById('nav-bodyweight')
+    };
+    const sections = {
+        workouts: document.getElementById('section-workouts'),
+        calendar: document.getElementById('section-calendar'),
+        messages: document.getElementById('section-messages'),
+        exercises: document.getElementById('section-exercises'),
+        bodyweight: document.getElementById('section-bodyweight')
+    };
+
+    function switchTab(name) {
+        Object.values(navs).forEach(n => n?.classList.remove('active'));
+        if(navs[name]) navs[name].classList.add('active');
+        Object.values(sections).forEach(s => s.style.display = 'none');
+        if(sections[name]) sections[name].style.display = 'block';
+
+        if(name === 'messages') initChat();
+        if(name === 'exercises') { const user = auth.currentUser; if(user) loadMainLibrary(user.uid); }
+    }
+
+    Object.keys(navs).forEach(key => { if(navs[key]) navs[key].addEventListener('click', (e) => { e.preventDefault(); switchTab(key); }); });
+
+    // ==========================================
+    // === CALENDAR LOGIC  ===
+    // ==========================================
+
+    function initCalendar(uid) {
+        // Load events realtime
+        const q = query(collection(db, `users/${uid}/calendar`), orderBy('date'));
+        onSnapshot(q, (snapshot) => {
+            calendarEvents = [];
+            snapshot.forEach(doc => calendarEvents.push({id: doc.id, ...doc.data()}));
+            renderCalendar();
+        });
+    }
+
+    window.renderCalendar = function() {
+        const grid = document.getElementById('calendar-grid');
+        const monthTitle = document.getElementById('calendar-month-year');
+        grid.innerHTML = "";
+        
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startDayIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; 
+        
+        monthTitle.innerText = firstDay.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+        // Empty slots
+        for(let i=0; i<startDayIndex; i++) {
+            const div = document.createElement('div');
+            div.style.background = 'transparent'; div.style.border = 'none';
+            grid.appendChild(div);
+        }
+
+        // Days
+        for(let d=1; d<=daysInMonth; d++) {
+            const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const dayEvents = calendarEvents.filter(e => e.date === dateStr);
+            
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            
+            // Highlight today
+            const today = new Date();
+            if(d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                dayDiv.classList.add('today');
+            }
+
+            dayDiv.innerHTML = `<span class="day-number">${d}</span>`;
+            
+            // Render Events
+            dayEvents.forEach(ev => {
+                const pill = document.createElement('div');
+                pill.className = 'event-pill' + (ev.byCoach ? '' : ' self');
+                pill.innerText = ev.title;
+                dayDiv.appendChild(pill);
+            });
+
+            // Click Handler
+            dayDiv.onclick = () => handleDayClick(dateStr, dayEvents);
+            grid.appendChild(dayDiv);
+        }
+    };
+
+    function handleDayClick(dateStr, events) {
+        
+        if(events.length > 0) {
+            
+            const ev = events[0];
+            document.getElementById('detail-title').innerText = ev.title;
+            document.getElementById('detail-note').innerText = ev.note || "No notes.";
+            document.getElementById('detail-by').innerText = ev.byCoach ? "Assigned by Coach" : "Planned by You";
+            document.getElementById('event-detail-modal').style.display = 'flex';
+        } else {
+           
+            if(myCoachId && currentUserRole !== 'coach') {
+                
+                alert("Your coach manages your schedule.");
+            } else {
+                
+                document.getElementById('cal-event-date').value = dateStr;
+                document.getElementById('cal-event-title').value = "";
+                document.getElementById('cal-event-note').value = "";
+                document.getElementById('add-event-modal').style.display = 'flex';
+            }
         }
     }
 
-    acceptBtn.addEventListener('click', async () => {
-        if (!currentInviteId || !pendingCoachId) return;
-        acceptBtn.innerText = "Connecting...";
-        try {
-            const user = auth.currentUser;
-            await updateDoc(doc(db, "users", user.uid), { myCoachId: pendingCoachId });
-            await updateDoc(doc(db, "invitations", currentInviteId), { status: "accepted" });
-            inviteNotification.style.display = "none";
-            myCoachId = pendingCoachId; 
-            alert("Success! You are now connected with your Coach.");
-        } catch (error) { console.error(error); alert("Error connecting."); }
-    });
+    window.saveCalendarEvent = async function() {
+        const title = document.getElementById('cal-event-title').value;
+        const note = document.getElementById('cal-event-note').value;
+        const date = document.getElementById('cal-event-date').value;
+        
+        if(!title) return alert("Enter title");
+        
+        await addDoc(collection(db, `users/${auth.currentUser.uid}/calendar`), {
+            date: date,
+            title: title,
+            note: note,
+            byCoach: false // Self assigned
+        });
+        
+        document.getElementById('add-event-modal').style.display = 'none';
+    };
+    
+    window.closeAddEventModal = function() { document.getElementById('add-event-modal').style.display = 'none'; };
+    window.prevMonth = function() { currentMonth--; if(currentMonth<0){currentMonth=11; currentYear--;} renderCalendar(); };
+    window.nextMonth = function() { currentMonth++; if(currentMonth>11){currentMonth=0; currentYear++;} renderCalendar(); };
 
-    declineBtn.addEventListener('click', async () => {
-        if (!currentInviteId) return;
-        if(confirm("Are you sure you want to decline?")) {
-            try {
-                await updateDoc(doc(db, "invitations", currentInviteId), { status: "declined" });
-                inviteNotification.style.display = "none";
-            } catch (error) { console.error(error); }
-        }
-    });
 
-    // --- CHAT ---
+    // --- LOGGER & LIBRARY LOGIC (Existing) ---
+    window.startLogger = function() {
+        editingWorkoutId = null; 
+        document.getElementById('workout-main-view').style.display = 'none';
+        document.getElementById('workout-logger-view').style.display = 'block';
+        currentWorkoutExercises = []; renderWorkoutUI(); 
+        const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('log-date').value = now.toISOString().slice(0,16);
+        document.getElementById('log-duration').value = ""; document.getElementById('log-note').value = "";
+    };
+    window.cancelLogger = function() { if(confirm("Discard changes?")) { document.getElementById('workout-logger-view').style.display = 'none'; document.getElementById('workout-main-view').style.display = 'block'; editingWorkoutId = null; } };
+    window.openExerciseSelector = function() { document.getElementById('exercise-selector-modal').style.display = 'flex'; loadExerciseSelectorList(); };
+    window.closeExerciseSelector = function() { document.getElementById('exercise-selector-modal').style.display = 'none'; };
+    window.openCreateExModal = function() { document.getElementById('create-ex-modal').style.display = 'flex'; };
+    window.closeCreateExModal = function() { document.getElementById('create-ex-modal').style.display = 'none'; };
+
+    
+    // MESSAGES
     async function initChat() {
+        if (currentUserRole === 'coach') return;
+        const chatArea = document.getElementById('chat-messages-area');
+        const chatForm = document.getElementById('chat-form');
+        const leaveBtn = document.getElementById('leave-coach-btn');
+        const coachNameEl = document.getElementById('chat-coach-name');
         if (!myCoachId) {
-            chatMessagesArea.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>You don't have a coach yet.</p>";
-            chatCoachName.innerText = "No Coach";
-            chatForm.style.display = "none";
-            leaveCoachBtn.style.display = "none";
-            return;
+            chatArea.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>You don't have a coach yet.</p>";
+            coachNameEl.innerText = "No Coach"; chatForm.style.display = "none"; leaveBtn.style.display = "none"; return;
         }
         const coachSnap = await getDoc(doc(db, "users", myCoachId));
-        if (coachSnap.exists()) {
-            chatCoachName.innerText = coachSnap.data().name || "Coach";
-        } else {
-            chatCoachName.innerText = "Coach";
-        }
-        chatForm.style.display = "flex";
-        leaveCoachBtn.style.display = "block";
-        const user = auth.currentUser;
-        if(user) openChatConnection(user.uid, myCoachId);
+        coachNameEl.innerText = coachSnap.exists() ? (coachSnap.data().name || "Coach") : "Coach";
+        chatForm.style.display = "flex"; leaveBtn.style.display = "block";
+        const user = auth.currentUser; if(user) openChatConnection(user.uid, myCoachId);
     }
-
     function openChatConnection(myId, coachId) {
         const conversationId = myId < coachId ? `${myId}_${coachId}` : `${coachId}_${myId}`;
         if (unsubscribeChat) unsubscribeChat();
         const q = query(collection(db, "chats", conversationId, "messages"), orderBy("timestamp", "asc"));
-
         unsubscribeChat = onSnapshot(q, (snapshot) => {
-            chatMessagesArea.innerHTML = "";
-            if (snapshot.empty) chatMessagesArea.innerHTML = "<p style='text-align:center; color:#444; margin-top:20px;'>No messages yet.</p>";
+            const chatArea = document.getElementById('chat-messages-area'); chatArea.innerHTML = "";
+            if (snapshot.empty) { chatArea.innerHTML = "<p style='text-align:center; color:#444; margin-top:20px;'>No messages yet. Say hi! 👋</p>"; }
             snapshot.forEach(doc => {
-                const msg = doc.data();
-                const isMe = msg.senderId === myId;
-                const bubble = document.createElement('div');
-                bubble.classList.add('message-bubble');
-                bubble.classList.add(isMe ? 'me' : 'them');
+                const msg = doc.data(); const isMe = msg.senderId === myId;
+                const bubble = document.createElement('div'); bubble.className = `message-bubble ${isMe?'me':'them'}`;
                 const date = msg.timestamp ? msg.timestamp.toDate() : new Date();
-                const timeStr = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
-                bubble.innerHTML = `${msg.text}<span class="msg-time">${timeStr}</span>`;
-                chatMessagesArea.appendChild(bubble);
+                bubble.innerHTML = `${msg.text}<span class="msg-time">${date.getHours()}:${(date.getMinutes()<10?'0':'')+date.getMinutes()}</span>`;
+                chatArea.appendChild(bubble);
             });
-            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+            chatArea.scrollTop = chatArea.scrollHeight;
         });
     }
-
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = chatInput.value.trim();
-        if (!text || !myCoachId) return;
-        const user = auth.currentUser;
+    document.getElementById('chat-form').addEventListener('submit', async (e) => {
+        e.preventDefault(); const input = document.getElementById('chat-input'); const text = input.value.trim();
+        if (!text || !myCoachId) return; const user = auth.currentUser;
         const conversationId = user.uid < myCoachId ? `${user.uid}_${myCoachId}` : `${myCoachId}_${user.uid}`;
-        chatInput.value = ""; 
-        await addDoc(collection(db, "chats", conversationId, "messages"), {
-            text: text, senderId: user.uid, timestamp: serverTimestamp()
+        input.value = ""; await addDoc(collection(db, "chats", conversationId, "messages"), { text: text, senderId: user.uid, timestamp: serverTimestamp() });
+    });
+    
+    // LIBRARY
+    async function loadMainLibrary(uid) {
+        const grid = document.getElementById('main-library-grid'); grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Loading...</p>';
+        const q = query(collection(db, `users/${uid}/exercises`), orderBy('name'));
+        onSnapshot(q, (snapshot) => {
+            grid.innerHTML = ""; if(snapshot.empty) { grid.innerHTML = '<p style="text-align:center; color:#666; grid-column:1/-1;">No exercises. Create one!</p>'; return; }
+            snapshot.forEach(docSnap => {
+                const ex = docSnap.data(); const card = document.createElement('div'); card.className = 'lib-card';
+                card.setAttribute('data-name', ex.name.toLowerCase()); card.setAttribute('data-cat', ex.category);
+                card.innerHTML = `<div class="lib-icon"><i class="fas fa-dumbbell"></i></div><div class="lib-title">${ex.name}</div><div class="lib-cat">${ex.category}</div><button class="lib-del" onclick="deleteExerciseFromMain('${docSnap.id}')">&times;</button>`;
+                grid.appendChild(card);
+            }); setupLibraryFilter();
         });
-    });
+    }
+    window.deleteExerciseFromMain = async function(id) { if(confirm("Delete?")) { await deleteDoc(doc(db, `users/${auth.currentUser.uid}/exercises`, id)); } };
+    function setupLibraryFilter() {
+        const searchInp = document.getElementById('main-lib-search'); const filterSel = document.getElementById('main-lib-filter');
+        const filterFn = () => { const term = searchInp.value.toLowerCase(); const cat = filterSel.value; document.querySelectorAll('.lib-card').forEach(card => { const name = card.getAttribute('data-name'); const c = card.getAttribute('data-cat'); card.style.display = (name.includes(term) && (cat === 'All' || c === cat)) ? 'flex' : 'none'; }); };
+        searchInp.onkeyup = filterFn; filterSel.onchange = filterFn;
+    }
+    async function loadExerciseSelectorList() {
+        const listDiv = document.getElementById('library-list'); listDiv.innerHTML = "Loading..."; const user = auth.currentUser;
+        const q = query(collection(db, `users/${user.uid}/exercises`), orderBy('name')); const snap = await getDocs(q);
+        listDiv.innerHTML = ""; if(snap.empty) listDiv.innerHTML = "<p style='padding:15px; color:#666; text-align:center;'>No exercises found.</p>";
+        snap.forEach(docSnap => {
+            const ex = docSnap.data(); const div = document.createElement('div'); div.className = 'selector-item';
+            div.innerHTML = `<span>${ex.name}</span> <span style="font-size:0.8rem; color:#666;">${ex.category}</span>`;
+            div.onclick = () => selectExercise(ex.name); listDiv.appendChild(div);
+        });
+        document.getElementById('search-exercise').onkeyup = function() { const filter = this.value.toUpperCase(); const items = listDiv.getElementsByClassName('selector-item'); for (let i = 0; i < items.length; i++) { items[i].style.display = items[i].innerText.toUpperCase().indexOf(filter) > -1 ? "" : "none"; } };
+    }
+    window.saveNewExerciseGlobal = async function() {
+        const name = document.getElementById('global-ex-name').value.trim(); const cat = document.getElementById('global-ex-cat').value; if(!name) return alert("Enter name");
+        const user = auth.currentUser; await addDoc(collection(db, `users/${user.uid}/exercises`), { name, category: cat });
+        document.getElementById('global-ex-name').value = ""; closeCreateExModal(); if(document.getElementById('exercise-selector-modal').style.display === 'flex') loadExerciseSelectorList();
+    };
 
-    leaveCoachBtn.addEventListener('click', async () => {
-        if(confirm("Are you sure you want to disconnect from your Coach?")) {
-            try {
-                const user = auth.currentUser;
-                await updateDoc(doc(db, "users", user.uid), { myCoachId: null });
-                alert("Disconnected.");
-                location.reload(); 
-            } catch(e) { console.error(e); }
+    // WORKOUT
+    function selectExercise(name) { const type = confirm(`Unilateral (Left/Right)?\nOK = Yes\nCancel = No`) ? 'unilateral' : 'bilateral'; const newEx = { id: Date.now(), name, type, sets: [] }; addSetToExerciseData(newEx); currentWorkoutExercises.push(newEx); renderWorkoutUI(); closeExerciseSelector(); }
+    function addSetToExerciseData(ex) { if(ex.type === 'bilateral') ex.sets.push({ weight: '', reps: '', rir: '' }); else { ex.sets.push({ side: 'L', weight: '', reps: '', rir: '' }); ex.sets.push({ side: 'R', weight: '', reps: '', rir: '' }); } }
+    function renderWorkoutUI() {
+        const container = document.getElementById('logged-exercises-container'); container.innerHTML = "";
+        if (currentWorkoutExercises.length === 0) { container.innerHTML = `<p style="text-align:center; color:#444; padding: 30px; border: 1px dashed #333; border-radius: 12px;">No exercises yet.<br>Tap below to add one.</p>`; return; }
+        currentWorkoutExercises.forEach((ex, exIndex) => {
+            const card = document.createElement('div'); card.className = 'exercise-card';
+            let setsHtml = ''; let setCounter = 1;
+            ex.sets.forEach((set, i) => {
+                const isUnilateral = ex.type === 'unilateral'; const rowClass = (isUnilateral) ? 'set-row unilateral-pair' : 'set-row';
+                let displayNum = setCounter; if(isUnilateral) { displayNum = (set.side === 'L') ? setCounter : ''; if(set.side === 'R') setCounter++; } else { setCounter++; }
+                setsHtml += `<div class="${rowClass}"><div class="set-num">${displayNum} <span style="font-size:0.6rem; margin-left:2px;">${set.side || ''}</span></div><input type="number" class="set-input" placeholder="-" value="${set.weight}" onchange="updateSet(${exIndex}, ${i}, 'weight', this.value)"><input type="number" class="set-input" placeholder="-" value="${set.reps}" onchange="updateSet(${exIndex}, ${i}, 'reps', this.value)"><select class="rir-select" onchange="updateSet(${exIndex}, ${i}, 'rir', this.value)"><option value="" ${set.rir==''?'selected':''}>-</option><option value="5" ${set.rir=='5'?'selected':''}>5</option><option value="fail" ${set.rir=='fail'?'selected':''}>F</option></select><button class="btn-del-set" onclick="removeSet(${exIndex}, ${i})">&times;</button></div>`;
+            });
+            card.innerHTML = `<div class="ex-header"><span class="ex-name">${ex.name}</span><button class="btn-ex-opt" onclick="removeExercise(${exIndex})">Remove</button></div><div class="set-header-row"><span>SET</span><span>KG</span><span>REPS</span><span>RIR</span><span></span></div><div>${setsHtml}</div><button class="btn-add-set" onclick="addSet(${exIndex})">+ ADD SET</button>`;
+            container.appendChild(card);
+        });
+    }
+    window.updateSet = function(exIdx, setIdx, field, val) { currentWorkoutExercises[exIdx].sets[setIdx][field] = val; };
+    window.addSet = function(exIdx) { addSetToExerciseData(currentWorkoutExercises[exIdx]); renderWorkoutUI(); };
+    window.removeSet = function(exIdx, setIdx) { currentWorkoutExercises[exIdx].sets.splice(setIdx, 1); renderWorkoutUI(); };
+    window.removeExercise = function(exIdx) { if(confirm("Remove?")) { currentWorkoutExercises.splice(exIdx, 1); renderWorkoutUI(); } };
+    window.saveWorkout = async function() {
+        const date = document.getElementById('log-date').value; const dur = document.getElementById('log-duration').value; const note = document.getElementById('log-note').value;
+        if(!currentWorkoutExercises.length) return alert("Empty workout!"); const user = auth.currentUser;
+        try {
+            const dataToSave = { date, duration: dur, note, exercises: currentWorkoutExercises, timestamp: serverTimestamp() };
+            if (editingWorkoutId) { await updateDoc(doc(db, `users/${user.uid}/workouts`, editingWorkoutId), dataToSave); alert("Updated!"); } 
+            else { await addDoc(collection(db, `users/${user.uid}/workouts`), dataToSave); }
+            document.getElementById('workout-logger-view').style.display = 'none'; document.getElementById('workout-main-view').style.display = 'block'; loadHistory(user.uid); editingWorkoutId = null;
+        } catch(e) { console.error(e); alert("Error saving."); }
+    };
+    async function loadHistory(uid) {
+        const div = document.getElementById('workout-history-list'); div.innerHTML = "<p style='text-align:center; color:#666; margin-top:50px;'>Loading history...</p>";
+        const q = query(collection(db, `users/${uid}/workouts`), orderBy('date', 'desc')); const snap = await getDocs(q);
+        div.innerHTML = ""; if(snap.empty) { div.innerHTML = `<div style="text-align:center; margin-top:50px;"><p style='color:#ccc; font-size:1.1rem;'>No workouts logged yet.</p></div>`; return; }
+        snap.forEach(docSnap => {
+            const w = docSnap.data(); const dateStr = new Date(w.date).toLocaleDateString() + ' ' + new Date(w.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const card = document.createElement('div'); card.className = 'history-card';
+            card.innerHTML = `<div><div class="hist-date">${dateStr}</div><div class="hist-stats"><span><i class="fas fa-clock"></i> ${w.duration || '?'} min</span><span style="margin-left:15px;"><i class="fas fa-dumbbell"></i> ${w.exercises ? w.exercises.length : 0} Exercises</span></div></div><div class="hist-actions"><button class="hist-btn edit" onclick="editWorkout('${docSnap.id}')"><i class="fas fa-pen"></i></button><button class="hist-btn del" onclick="deleteWorkout('${docSnap.id}')"><i class="fas fa-trash"></i></button></div>`;
+            div.appendChild(card);
+        });
+    }
+    window.editWorkout = async function(id) {
+        const user = auth.currentUser; if (!user) return; const docRef = doc(db, `users/${user.uid}/workouts`, id); const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data(); editingWorkoutId = id; document.getElementById('log-date').value = data.date; document.getElementById('log-duration').value = data.duration; document.getElementById('log-note').value = data.note || ""; currentWorkoutExercises = data.exercises || [];
+            document.getElementById('workout-main-view').style.display = 'none'; document.getElementById('workout-logger-view').style.display = 'block'; renderWorkoutUI();
         }
-    });
+    };
+    window.deleteWorkout = async function(id) { if(confirm("Delete?")) { await deleteDoc(doc(db, `users/${auth.currentUser.uid}/workouts`, id)); loadHistory(auth.currentUser.uid); } };
+    window.logBodyweight = async function() { const val = parseFloat(document.getElementById('weight-input').value); if(!val) return; await updateDoc(doc(db, "users", auth.currentUser.uid), { weightHistory: arrayUnion({ date: new Date().toISOString(), weight: val }) }); document.getElementById('weight-input').value = ""; loadWeightData(auth.currentUser.uid); };
+    async function loadWeightData(uid) {
+        const snap = await getDoc(doc(db, "users", uid));
+        if(snap.exists()) {
+            const data = snap.data(); currentWeightHistory = data.weightHistory || []; let sorted = [...currentWeightHistory].sort((a,b)=>new Date(a.date)-new Date(b.date));
+            const ctx = document.getElementById('weightChart').getContext('2d'); if(myWeightChart) myWeightChart.destroy();
+            myWeightChart = new Chart(ctx, { type: 'line', data: { labels: sorted.map(i=>new Date(i.date).toLocaleDateString()), datasets: [{ label: 'Weight', data: sorted.map(i=>i.weight), borderColor: '#FFD700', backgroundColor:'rgba(255,215,0,0.1)', fill:true, tension:0.4 }] }, options: { plugins: {legend:false}, maintainAspectRatio:false, scales:{x:{display:false}, y:{grid:{color:'#333'}}} } });
+            const list = document.getElementById('weight-history-list'); list.innerHTML = ""; let rev = [...currentWeightHistory].sort((a,b)=>new Date(b.date)-new Date(a.date));
+            rev.forEach((item) => { list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; color:#ccc;"><span>${new Date(item.date).toLocaleDateString()}</span><strong style="color:#FFD700">${item.weight} kg</strong></div>`; });
+        }
+    }
+    async function checkInvitations(uid) {
+        const q = query(collection(db, "invitations"), where("toAthleteId", "==", uid), where("status", "==", "pending")); const snap = await getDocs(q);
+        if(!snap.empty) { const d = snap.docs[0].data(); document.getElementById('invite-notification').innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;"><div><h3 style="margin: 0; color: white; font-size: 1.1rem;">Coach Invitation</h3><p style="margin: 5px 0 0; color: #ccc; font-size: 0.9rem;">${d.fromCoachName || 'Coach'} wants to connect.</p></div><div style="display: flex; gap: 10px;"><button onclick="respondInvite('${snap.docs[0].id}', '${d.fromCoachId}', false)" class="save-btn" style="background: transparent; border: 1px solid #FF4444; color: #FF4444; width: auto; padding: 8px 15px;">Decline</button><button onclick="respondInvite('${snap.docs[0].id}', '${d.fromCoachId}', true)" class="save-btn" style="background: #00FF88; color: black; width: auto; padding: 8px 20px;">Accept</button></div></div>`; document.getElementById('invite-notification').style.display = 'block'; }
+    }
+    window.respondInvite = async function(inviteId, coachId, accept) { if(accept) { await updateDoc(doc(db, "users", auth.currentUser.uid), { myCoachId: coachId }); await updateDoc(doc(db, "invitations", inviteId), { status: "accepted" }); alert("Connected!"); } else { await updateDoc(doc(db, "invitations", inviteId), { status: "declined" }); } document.getElementById('invite-notification').style.display = 'none'; location.reload(); }
     </script>
 </body>
 </html>

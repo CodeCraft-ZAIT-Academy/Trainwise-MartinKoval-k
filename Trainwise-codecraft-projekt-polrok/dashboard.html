@@ -8,54 +8,82 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* --- CALENDAR STYLES --- */
+        /* --- AI ASSISTANT STYLES --- */
+        .ai-landing-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 80vh; text-align: center; animation: fadeIn 0.5s;
+        }
+        .ai-title {
+            color: #FFD700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 30px; font-weight: 300;
+        }
+        .ai-brain-box {
+            background: #FFD700; width: 200px; height: 200px; border-radius: 40px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); margin-bottom: 50px;
+            transition: transform 0.3s;
+        }
+        .ai-brain-box:hover { transform: scale(1.05); }
+        .ai-brain-icon { font-size: 100px; color: black; }
+        
+        .ai-input-wrapper { width: 100%; max-width: 600px; position: relative; }
+        .ai-main-input {
+            width: 100%; background: #222; border: 2px solid #FFD700; color: white;
+            padding: 20px 30px; border-radius: 30px; font-size: 1.1rem; outline: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .ai-main-input:focus { background: #000; box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); }
+        
+        .quick-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .quick-btn {
+            background: rgba(255, 215, 0, 0.1); border: 1px solid #FFD700; color: #FFD700;
+            padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
+        }
+        .quick-btn:hover { background: #FFD700; color: black; }
+        
+        /* AI Chat Interface */
+        .ai-chat-interface {
+            display: none; flex-direction: column; height: 80vh;
+            background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden;
+        }
+        .chat-header-custom {
+            padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;
+        }
+        .close-chat-btn {
+            background: none; border: none; color: #FFD700; font-size: 1.5rem; cursor: pointer; transition: 0.2s;
+        }
+        .close-chat-btn:hover { color: white; transform: scale(1.1); }
+
+        .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .chat-msg { max-width: 80%; padding: 15px; border-radius: 12px; line-height: 1.5; font-size: 0.95rem; }
+        .chat-msg.user { align-self: flex-end; background: #FFD700; color: black; font-weight: 500; }
+        .chat-msg.bot { align-self: flex-start; background: #222; color: #eee; border-left: 3px solid #FFD700; }
+        .chat-input-bar { padding: 15px; background: #161616; border-top: 1px solid #333; display: flex; gap: 10px; }
+
+        /* --- Global Styles --- */
         .calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
-        .calendar-day {
-            background: #111; border: 1px solid #333; min-height: 100px; border-radius: 8px;
-            padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 3px; position: relative;
-        }
+        .calendar-day { background: #111; border: 1px solid #333; min-height: 100px; border-radius: 8px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 3px; position: relative; }
         .calendar-day:hover { border-color: #FFD700; background: #161616; }
         .day-number { font-size: 0.9rem; color: #666; align-self: flex-end; }
-        .event-pill {
-            background: #222; border-left: 2px solid #FFD700; color: #fff;
-            font-size: 0.8rem; padding: 4px; border-radius: 2px; margin-bottom: 2px;
-            overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-        }
+        .event-pill { background: #222; border-left: 2px solid #FFD700; color: #fff; font-size: 0.8rem; padding: 4px; border-radius: 2px; margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .event-pill.self { border-left-color: #00FF88; opacity: 0.7; }
-
-        
         .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .lib-card {
-            background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            transition: transform 0.2s, border-color 0.2s; position: relative;
-        }
+        .lib-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, border-color 0.2s; position: relative; }
         .lib-card:hover { transform: translateY(-3px); border-color: #555; }
-        .lib-icon {
-            width: 40px; height: 40px; background: #222; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: #FFD700; font-size: 1.2rem; margin-bottom: 10px;
-        }
+        .lib-icon { width: 40px; height: 40px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #FFD700; font-size: 1.2rem; margin-bottom: 10px; }
         .lib-title { font-weight: bold; color: white; font-size: 1rem; margin-bottom: 5px; }
         .lib-cat { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; background: #000; padding: 3px 8px; border-radius: 4px; }
         .lib-del { position: absolute; top: 10px; right: 10px; color: #444; background: none; border: none; cursor: pointer; }
         .lib-del:hover { color: #FF4444; }
-
-       
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; }
         .modal-box { background: #111; border: 1px solid #FFD700; width: 90%; max-width: 600px; padding: 20px; border-radius: 12px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;}
-        
         .history-card { background: #111; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid #333; position: relative; display: flex; justify-content: space-between; align-items: center; }
         .hist-actions button { background: none; border: none; color: #666; font-size: 1.1rem; cursor: pointer; margin-left: 10px; }
         .hist-actions button:hover { color: #FFD700; }
         .hist-actions button.del:hover { color: #FF4444; }
-
-       
-        .coach-select {
-            background: #000; border: 1px solid #444; color: white; padding: 10px;
-            border-radius: 6px; width: 100%; max-width: 300px; font-size: 1rem; margin-bottom: 20px;
-        }
+        .coach-select { background: #000; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; width: 100%; max-width: 300px; font-size: 1rem; margin-bottom: 20px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 
@@ -95,6 +123,9 @@
             </a>
             <a href="#" id="nav-workouts" class="sidebar-btn">
                 <img src="images/workouts.png" alt="Workouts" class="sidebar-icon"> <span>Workouts</span>
+            </a>
+            <a href="#" id="nav-ai" class="sidebar-btn" style="border-top: 1px solid #333; margin-top: 10px; color: #FFD700;">
+                <i class="fas fa-brain" style="margin-right: 12px;"></i> <span>AI Assistant</span>
             </a>
         </aside>
 
@@ -203,6 +234,42 @@
                 </div>
             </div>
 
+            <div id="section-ai" style="display: none;">
+                
+                <div id="ai-landing" class="ai-landing-container">
+                    <h2 class="ai-title">YOUR PERSONAL AI ASSISTANT</h2>
+                    
+                    <div class="ai-brain-box">
+                        <i class="fas fa-brain ai-brain-icon"></i>
+                    </div>
+
+                    <div class="ai-input-wrapper">
+                        <input type="text" id="ai-landing-input" class="ai-main-input" placeholder="Ask about your clients..." autocomplete="off">
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="quick-btn" onclick="askQuick('How many active clients do I have?')">Active Clients</button>
+                        <button class="quick-btn" onclick="askQuick('Who worked out today?')">Today's Workouts</button>
+                        <button class="quick-btn" onclick="askQuick('What is Rudo\'s weight progress?')">Weight Progress</button>
+                    </div>
+                </div>
+
+                <div id="ai-chat-view" class="ai-chat-interface">
+                    <div class="chat-header-custom">
+                        <h2 style="font-size: 1.2rem; color: #FFD700; margin: 0;">Coach Assistant</h2>
+                        <button class="close-chat-btn" onclick="closeAiChat()" title="Close Chat">&times;</button>
+                    </div>
+                    
+                    <div class="chat-history" id="ai-chat-history"></div>
+                    
+                    <div class="chat-input-bar">
+                        <input type="text" id="ai-chat-input" class="ai-main-input" style="border-radius: 10px; padding: 10px 15px;" placeholder="Ask follow up..." autocomplete="off">
+                        <button class="save-btn" style="width: auto;" onclick="sendAiChat()">Send</button>
+                    </div>
+                </div>
+
+            </div>
+
         </main>
     </div>
 
@@ -248,13 +315,10 @@
         <div class="modal-box">
             <h3 style="margin-top:0; color:#FFD700;">Edit Workout Log</h3>
             <input type="hidden" id="edit-workout-id">
-            
             <label style="color:#888; font-size:0.8rem;">Date</label>
             <input type="datetime-local" id="edit-date" class="meta-input" style="margin-bottom:10px;">
-            
             <label style="color:#888; font-size:0.8rem;">Note</label>
             <input type="text" id="edit-note" class="meta-input" style="margin-bottom:20px;">
-            
             <div style="display:flex; gap:10px;">
                 <button onclick="saveEditedWorkout()" class="save-btn">Save Changes</button>
                 <button onclick="document.getElementById('edit-workout-modal').style.display='none'" class="save-btn" style="background:#333;">Cancel</button>
@@ -279,11 +343,13 @@
         </div>
     </div>
 
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, onSnapshot, orderBy, updateDoc, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // === API KĽÚČ (GROQ) ===
+        const GROQ_API_KEY = "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"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyD-Ozd5hlChO_gjvhHF4P9UIVyGW03msgI",
@@ -313,11 +379,9 @@
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if(data.role !== 'coach') window.location.href = "index.html"; // Protect dashboard
-                    
+                    if(data.role !== 'coach') window.location.href = "index.html"; 
                     document.getElementById('header-username').innerText = data.name || "Coach";
                     if(data.photoURL) document.getElementById('header-profile-img').src = `images/${data.photoURL}`;
-                    
                     loadClientsData(user.uid);
                     loadCoachExercises(user.uid);
                 }
@@ -331,7 +395,8 @@
             calendar: document.getElementById('nav-calendar'),
             messages: document.getElementById('nav-messages'),
             exercises: document.getElementById('nav-exercises'),
-            workouts: document.getElementById('nav-workouts')
+            workouts: document.getElementById('nav-workouts'),
+            ai: document.getElementById('nav-ai')
         };
         const sections = {
             dashboard: document.getElementById('section-overview'),
@@ -339,7 +404,8 @@
             calendar: document.getElementById('section-calendar'),
             messages: document.getElementById('section-messages'),
             exercises: document.getElementById('section-exercises'),
-            workouts: document.getElementById('section-workouts')
+            workouts: document.getElementById('section-workouts'),
+            ai: document.getElementById('section-ai')
         };
 
         function switchTab(key) {
@@ -355,7 +421,140 @@
             navs[key].addEventListener('click', (e) => { e.preventDefault(); switchTab(key); });
         });
 
-        // 2. CLIENTS DATA & SELECTORS
+        // === AI LOGIC (Opravená pre Bodyweight + Slovenčinu) ===
+
+        async function gatherCoachContext() {
+            let context = "DATA ABOUT MY CLIENTS:\n";
+            
+            // 1. Zbieranie info o klientoch + BODYWEIGHT
+            clientsList.forEach(c => {
+                context += `- Name: ${c.name}, Email: ${c.email}\n`;
+                
+                // TU JE PRIDANÁ VÁHA
+                if (c.weightHistory && c.weightHistory.length > 0) {
+                    // Zoradíme od najnovšej
+                    const history = [...c.weightHistory].sort((a,b) => new Date(b.date) - new Date(a.date));
+                    const latest = history[0];
+                    // Zoberieme posledné 3 záznamy pre kontext
+                    const recentLog = history.slice(0, 3).map(w => `${w.weight}kg (${new Date(w.date).toLocaleDateString()})`).join(", ");
+                    
+                    context += `  > Bodyweight Status: Current: ${latest.weight}kg. Recent logs: [${recentLog}]\n`;
+                } else {
+                    context += `  > Bodyweight Status: No weight tracked yet.\n`;
+                }
+            });
+
+            // 2. Zbieranie tréningov
+            context += "\nRECENT WORKOUT LOGS (Sample):\n";
+            for (const client of clientsList.slice(0, 10)) { 
+                const wQ = query(collection(db, `users/${client.id}/workouts`), orderBy('date', 'desc'), limit(3));
+                const wSnap = await getDocs(wQ);
+                wSnap.forEach(wDoc => {
+                    const w = wDoc.data();
+                    context += `[Client: ${client.name}] Date: ${w.date}, Duration: ${w.duration}min, Note: ${w.note}\n`;
+                    if(w.exercises) {
+                         w.exercises.forEach(ex => context += `   - ${ex.name} (${ex.sets.length} sets)\n`);
+                    }
+                });
+            }
+            return context;
+        }
+
+        async function getGroqResponse(userQuery) {
+            const dbContext = await gatherCoachContext();
+            
+            // SYSTEM PROMPT s príkazom na jazyk
+            const systemPrompt = `
+            You are an AI assistant for a fitness coach using the 'Trainwise' app.
+            You have access to the coach's database regarding their clients below.
+            
+            DATABASE CONTEXT:
+            ${dbContext}
+            
+            INSTRUCTIONS:
+            - Answer the coach's questions based strictly on the provided data.
+            - If data (like bodyweight or workouts) is missing, say so.
+            - CRITICAL: DETECT THE LANGUAGE of the user. If the user asks in Slovak (Slovenčina), YOU MUST REPLY IN SLOVAK.
+            - If the user asks in English, reply in English.
+            `;
+
+            const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: userQuery }
+                        ],
+                        model: "llama-3.3-70b-versatile" 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error("API Error:", data.error);
+                    return "API Error: " + data.error.message;
+                }
+
+                if(data.choices && data.choices.length > 0) {
+                    return data.choices[0].message.content;
+                }
+                return "AI neodpovedala. Skontrolujte konzolu.";
+            } catch (e) {
+                console.error(e);
+                return "Chyba pripojenia k AI mozgu.";
+            }
+        }
+
+        // UI Handlers
+        const landingInput = document.getElementById('ai-landing-input');
+        const chatInput = document.getElementById('ai-chat-input');
+        
+        landingInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAiInteraction(landingInput.value); });
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendAiChat(); });
+
+        window.askQuick = function(txt) { handleAiInteraction(txt); }
+        window.sendAiChat = function() { const txt = chatInput.value; if(txt) handleAiInteraction(txt); }
+
+        window.closeAiChat = function() {
+            document.getElementById('ai-chat-view').style.display = 'none';
+            document.getElementById('ai-landing').style.display = 'flex';
+            document.getElementById('ai-chat-history').innerHTML = ""; 
+        }
+
+        async function handleAiInteraction(text) {
+            if(!text.trim()) return;
+            document.getElementById('ai-landing').style.display = 'none';
+            document.getElementById('ai-chat-view').style.display = 'flex';
+            
+            addChatBubble(text, 'user');
+            landingInput.value = "";
+            chatInput.value = "";
+
+            const loadingBubble = addChatBubble("Analyzujem dáta...", 'bot');
+            const answer = await getGroqResponse(text);
+            loadingBubble.innerText = answer;
+        }
+
+        function addChatBubble(text, type) {
+            const history = document.getElementById('ai-chat-history');
+            const div = document.createElement('div');
+            div.className = `chat-msg ${type}`;
+            div.innerText = text;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+            return div;
+        }
+
+
+        // --- OSTATNÁ FUNKCIONALITA ---
+
         async function loadClientsData(coachId) {
             const q = query(collection(db, "users"), where("myCoachId", "==", coachId));
             const snapshot = await getDocs(q);
@@ -363,300 +562,81 @@
             const container = document.getElementById('clients-list-container');
             const calSelect = document.getElementById('cal-client-select');
             const workSelect = document.getElementById('workout-client-select');
-            
             container.innerHTML = "";
             calSelect.innerHTML = '<option value="">Select Athlete to Plan...</option>';
             workSelect.innerHTML = '<option value="">Select Athlete to view logs...</option>';
-
             document.getElementById('stat-total-clients').innerText = snapshot.size;
-
             snapshot.forEach(docSnap => {
                 const client = { id: docSnap.id, ...docSnap.data() };
                 clientsList.push(client);
-
-                // Populate Clients List
-                const card = document.createElement('div');
-                card.className = 'client-item';
+                const card = document.createElement('div'); card.className = 'client-item';
                 card.style.cssText = "display:flex; align-items:center; padding:15px; border-bottom:1px solid #333; gap:15px;";
-                card.innerHTML = `
-                    <img src="${client.photoURL ? 'images/'+client.photoURL : 'images/avatar-19.png'}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
-                    <div style="flex:1;">
-                        <h4 style="margin:0; color:white;">${client.name}</h4>
-                        <span style="color:#666; font-size:0.8rem;">${client.email}</span>
-                    </div>
-                    <button class="save-btn" onclick="openClientProfile('${client.id}')" style="width:auto; padding:5px 15px;">Profile</button>
-                `;
+                card.innerHTML = `<img src="${client.photoURL ? 'images/'+client.photoURL : 'images/avatar-19.png'}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"><div style="flex:1;"><h4 style="margin:0; color:white;">${client.name}</h4><span style="color:#666; font-size:0.8rem;">${client.email}</span></div><button class="save-btn" onclick="openClientProfile('${client.id}')" style="width:auto; padding:5px 15px;">Profile</button>`;
                 container.appendChild(card);
-
-                // Populate Dropdowns
-                const opt1 = document.createElement('option'); opt1.value = client.id; opt1.innerText = client.name;
-                calSelect.appendChild(opt1);
-                
-                const opt2 = document.createElement('option'); opt2.value = client.id; opt2.innerText = client.name;
-                workSelect.appendChild(opt2);
+                const opt1 = document.createElement('option'); opt1.value = client.id; opt1.innerText = client.name; calSelect.appendChild(opt1);
+                const opt2 = document.createElement('option'); opt2.value = client.id; opt2.innerText = client.name; workSelect.appendChild(opt2);
             });
-
             if(snapshot.empty) container.innerHTML = '<p style="text-align:center; padding:20px; color:#666;">No clients yet.</p>';
         }
 
-        // 3. INVITE LOGIC
         document.getElementById('add-client-btn').onclick = () => document.getElementById('invite-modal').style.display = 'flex';
         document.getElementById('send-invite-btn').onclick = async () => {
-            const email = document.getElementById('invite-email').value;
-            const status = document.getElementById('invite-status');
-            const coach = auth.currentUser;
-            
-            const q = query(collection(db, "users"), where("email", "==", email));
-            const snap = await getDocs(q);
+            const email = document.getElementById('invite-email').value; const status = document.getElementById('invite-status'); const coach = auth.currentUser;
+            const q = query(collection(db, "users"), where("email", "==", email)); const snap = await getDocs(q);
             if(snap.empty) { status.innerText = "User not found."; status.style.color="red"; return; }
-            
-            const athleteId = snap.docs[0].id;
-            await addDoc(collection(db, "invitations"), {
-                fromCoachId: coach.uid, fromCoachName: document.getElementById('header-username').innerText,
-                toAthleteId: athleteId, status: 'pending', timestamp: serverTimestamp()
-            });
-            status.innerText = "Sent!"; status.style.color="green";
-            setTimeout(()=> document.getElementById('invite-modal').style.display='none', 1500);
+            const athleteId = snap.docs[0].id; await addDoc(collection(db, "invitations"), { fromCoachId: coach.uid, fromCoachName: document.getElementById('header-username').innerText, toAthleteId: athleteId, status: 'pending', timestamp: serverTimestamp() });
+            status.innerText = "Sent!"; status.style.color="green"; setTimeout(()=> document.getElementById('invite-modal').style.display='none', 1500);
         };
 
-        // 4. CALENDAR LOGIC
         document.getElementById('cal-client-select').addEventListener('change', (e) => {
-            const uid = e.target.value;
-            if(!uid) {
-                document.getElementById('calendar-wrapper').style.display='none';
-                document.getElementById('cal-placeholder').style.display='block';
-                return;
-            }
-            document.getElementById('calendar-wrapper').style.display='block';
-            document.getElementById('cal-placeholder').style.display='none';
-            
-            const q = query(collection(db, `users/${uid}/calendar`));
-            onSnapshot(q, (snap) => {
-                calendarEvents = [];
-                snap.forEach(d => calendarEvents.push(d.data()));
-                renderCalendar();
-            });
+            const uid = e.target.value; if(!uid) { document.getElementById('calendar-wrapper').style.display='none'; document.getElementById('cal-placeholder').style.display='block'; return; }
+            document.getElementById('calendar-wrapper').style.display='block'; document.getElementById('cal-placeholder').style.display='none';
+            const q = query(collection(db, `users/${uid}/calendar`)); onSnapshot(q, (snap) => { calendarEvents = []; snap.forEach(d => calendarEvents.push(d.data())); renderCalendar(); });
         });
-
         window.renderCalendar = function() {
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = "";
-            document.getElementById('calendar-month-year').innerText = new Date(currentYear, currentMonth).toLocaleString('default', {month:'long', year:'numeric'});
-            
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth+1, 0);
-            const startDayIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay()-1;
-
+            const grid = document.getElementById('calendar-grid'); grid.innerHTML = ""; document.getElementById('calendar-month-year').innerText = new Date(currentYear, currentMonth).toLocaleString('default', {month:'long', year:'numeric'});
+            const firstDay = new Date(currentYear, currentMonth, 1); const lastDay = new Date(currentYear, currentMonth+1, 0); const startDayIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay()-1;
             for(let i=0; i<startDayIndex; i++) grid.appendChild(document.createElement('div'));
-
             for(let d=1; d<=lastDay.getDate(); d++) {
                 const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                const div = document.createElement('div');
-                div.className = 'calendar-day';
-                div.innerHTML = `<span class="day-number">${d}</span>`;
-                
-                calendarEvents.filter(e => e.date === dateStr).forEach(ev => {
-                    div.innerHTML += `<div class="event-pill ${ev.byCoach?'':'self'}">${ev.title}</div>`;
-                });
-
-                div.onclick = () => {
-                    document.getElementById('assign-date').value = dateStr;
-                    document.getElementById('assign-title').value = "";
-                    document.getElementById('assign-note').value = "";
-                    document.getElementById('assign-modal').style.display = 'flex';
-                };
+                const div = document.createElement('div'); div.className = 'calendar-day'; div.innerHTML = `<span class="day-number">${d}</span>`;
+                calendarEvents.filter(e => e.date === dateStr).forEach(ev => { div.innerHTML += `<div class="event-pill ${ev.byCoach?'':'self'}">${ev.title}</div>`; });
+                div.onclick = () => { document.getElementById('assign-date').value = dateStr; document.getElementById('assign-title').value = ""; document.getElementById('assign-note').value = ""; document.getElementById('assign-modal').style.display = 'flex'; };
                 grid.appendChild(div);
             }
         };
-
-        window.saveAssignment = async function() {
-            const uid = document.getElementById('cal-client-select').value;
-            const date = document.getElementById('assign-date').value;
-            const title = document.getElementById('assign-title').value;
-            const note = document.getElementById('assign-note').value;
-            if(!title || !uid) return;
-            await addDoc(collection(db, `users/${uid}/calendar`), { date, title, note, byCoach: true });
-            document.getElementById('assign-modal').style.display = 'none';
-        };
-
+        window.saveAssignment = async function() { const uid = document.getElementById('cal-client-select').value; const date = document.getElementById('assign-date').value; const title = document.getElementById('assign-title').value; const note = document.getElementById('assign-note').value; if(!title || !uid) return; await addDoc(collection(db, `users/${uid}/calendar`), { date, title, note, byCoach: true }); document.getElementById('assign-modal').style.display = 'none'; };
         window.prevMonth = function() { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderCalendar(); };
         window.nextMonth = function() { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderCalendar(); };
 
-        // 5. EXERCISES (Coach Library)
         window.openCreateExModal = () => document.getElementById('create-ex-modal').style.display = 'flex';
-        
         async function loadCoachExercises(uid) {
-            const grid = document.getElementById('main-library-grid');
-            const q = query(collection(db, `users/${uid}/exercises`), orderBy('name'));
-            onSnapshot(q, (snap) => {
-                grid.innerHTML = "";
-                if(snap.empty) { grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#666;">No exercises. Create one!</p>'; return; }
-                snap.forEach(docSnap => {
-                    const ex = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = 'lib-card';
-                    card.innerHTML = `
-                        <div class="lib-icon"><i class="fas fa-dumbbell"></i></div>
-                        <div class="lib-title">${ex.name}</div>
-                        <div class="lib-cat">${ex.category}</div>
-                        <button class="lib-del" onclick="deleteExercise('${docSnap.id}')">&times;</button>
-                    `;
-                    grid.appendChild(card);
-                });
-            });
+            const grid = document.getElementById('main-library-grid'); const q = query(collection(db, `users/${uid}/exercises`), orderBy('name'));
+            onSnapshot(q, (snap) => { grid.innerHTML = ""; if(snap.empty) { grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#666;">No exercises. Create one!</p>'; return; } snap.forEach(docSnap => { const ex = docSnap.data(); const card = document.createElement('div'); card.className = 'lib-card'; card.innerHTML = `<div class="lib-icon"><i class="fas fa-dumbbell"></i></div><div class="lib-title">${ex.name}</div><div class="lib-cat">${ex.category}</div><button class="lib-del" onclick="deleteExercise('${docSnap.id}')">&times;</button>`; grid.appendChild(card); }); });
         }
-
-        window.saveNewExercise = async function() {
-            const name = document.getElementById('new-ex-name').value;
-            const cat = document.getElementById('new-ex-cat').value;
-            if(!name) return;
-            await addDoc(collection(db, `users/${auth.currentUser.uid}/exercises`), { name, category: cat });
-            document.getElementById('create-ex-modal').style.display = 'none';
-        };
+        window.saveNewExercise = async function() { const name = document.getElementById('new-ex-name').value; const cat = document.getElementById('new-ex-cat').value; if(!name) return; await addDoc(collection(db, `users/${auth.currentUser.uid}/exercises`), { name, category: cat }); document.getElementById('create-ex-modal').style.display = 'none'; };
         window.deleteExercise = async (id) => { if(confirm("Delete exercise?")) await deleteDoc(doc(db, `users/${auth.currentUser.uid}/exercises`, id)); };
 
-        // 6. WORKOUTS (View Client History)
         document.getElementById('workout-client-select').addEventListener('change', async (e) => {
-            const uid = e.target.value;
-            const container = document.getElementById('client-workouts-list');
-            if(!uid) { container.innerHTML = '<p style="text-align:center; color:#666; padding:40px;">Select a client.</p>'; return; }
-            
-            container.innerHTML = "Loading...";
-            const q = query(collection(db, `users/${uid}/workouts`), orderBy('date', 'desc'));
-            onSnapshot(q, (snap) => {
-                container.innerHTML = "";
-                if(snap.empty) { container.innerHTML = '<p style="text-align:center; padding:20px;">No workouts logged.</p>'; return; }
-                
-                snap.forEach(docSnap => {
-                    const w = docSnap.data();
-                    const dateStr = new Date(w.date).toLocaleDateString();
-                    const div = document.createElement('div');
-                    div.className = 'history-card';
-                    div.innerHTML = `
-                        <div>
-                            <div class="hist-date">${dateStr}</div>
-                            <div class="hist-stats">${w.duration||0} min | ${w.exercises?.length||0} Exercises</div>
-                            <div style="color:#666; font-size:0.8rem; margin-top:5px;">${w.note || ""}</div>
-                        </div>
-                        <div class="hist-actions">
-                            <button onclick="openEditWorkout('${uid}', '${docSnap.id}')"><i class="fas fa-pen"></i></button>
-                            <button class="del" onclick="deleteClientWorkout('${uid}', '${docSnap.id}')"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                });
-            });
+            const uid = e.target.value; const container = document.getElementById('client-workouts-list'); if(!uid) { container.innerHTML = '<p style="text-align:center; color:#666; padding:40px;">Select a client.</p>'; return; }
+            container.innerHTML = "Loading..."; const q = query(collection(db, `users/${uid}/workouts`), orderBy('date', 'desc'));
+            onSnapshot(q, (snap) => { container.innerHTML = ""; if(snap.empty) { container.innerHTML = '<p style="text-align:center; padding:20px;">No workouts logged.</p>'; return; } snap.forEach(docSnap => { const w = docSnap.data(); const dateStr = new Date(w.date).toLocaleDateString(); const div = document.createElement('div'); div.className = 'history-card'; div.innerHTML = `<div><div class="hist-date">${dateStr}</div><div class="hist-stats">${w.duration||0} min | ${w.exercises?.length||0} Exercises</div><div style="color:#666; font-size:0.8rem; margin-top:5px;">${w.note || ""}</div></div><div class="hist-actions"><button onclick="openEditWorkout('${uid}', '${docSnap.id}')"><i class="fas fa-pen"></i></button><button class="del" onclick="deleteClientWorkout('${uid}', '${docSnap.id}')"><i class="fas fa-trash"></i></button></div>`; container.appendChild(div); }); });
         });
+        let editingWorkoutRef = null;
+        window.openEditWorkout = async function(uid, wid) { const snap = await getDoc(doc(db, `users/${uid}/workouts`, wid)); if(snap.exists()) { const d = snap.data(); editingWorkoutRef = { uid, wid }; document.getElementById('edit-workout-id').value = wid; document.getElementById('edit-date').value = d.date; document.getElementById('edit-note').value = d.note || ""; document.getElementById('edit-workout-modal').style.display = 'flex'; } };
+        window.saveEditedWorkout = async function() { if(!editingWorkoutRef) return; await updateDoc(doc(db, `users/${editingWorkoutRef.uid}/workouts`, editingWorkoutRef.wid), { date: document.getElementById('edit-date').value, note: document.getElementById('edit-note').value }); document.getElementById('edit-workout-modal').style.display = 'none'; };
+        window.deleteClientWorkout = async function(uid, wid) { if(confirm("Delete this client's workout?")) { await deleteDoc(doc(db, `users/${uid}/workouts`, wid)); } };
 
-        // Edit Workout Logic
-        let editingWorkoutRef = null; // Store {uid, id}
-        window.openEditWorkout = async function(uid, wid) {
-            const snap = await getDoc(doc(db, `users/${uid}/workouts`, wid));
-            if(snap.exists()) {
-                const d = snap.data();
-                editingWorkoutRef = { uid, wid };
-                document.getElementById('edit-workout-id').value = wid;
-                document.getElementById('edit-date').value = d.date;
-                document.getElementById('edit-note').value = d.note || "";
-                document.getElementById('edit-workout-modal').style.display = 'flex';
-            }
-        };
-
-        window.saveEditedWorkout = async function() {
-            if(!editingWorkoutRef) return;
-            const date = document.getElementById('edit-date').value;
-            const note = document.getElementById('edit-note').value;
-            
-            await updateDoc(doc(db, `users/${editingWorkoutRef.uid}/workouts`, editingWorkoutRef.wid), {
-                date: date, note: note
-            });
-            document.getElementById('edit-workout-modal').style.display = 'none';
-        };
-
-        window.deleteClientWorkout = async function(uid, wid) {
-            if(confirm("Delete this client's workout?")) {
-                await deleteDoc(doc(db, `users/${uid}/workouts`, wid));
-            }
-        };
-
-        // 7. CLIENT PROFILE & CHART (Reuse Logic)
         window.openClientProfile = async function(clientId) {
-            const modal = document.getElementById('client-modal');
-            modal.style.display = 'flex';
-            const userRef = doc(db, "users", clientId);
-            const docSnap = await getDoc(userRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('modal-client-name').innerText = data.name || "Unknown";
-                document.getElementById('modal-client-email').innerText = data.email;
-                document.getElementById('modal-client-img').src = data.photoURL ? `images/${data.photoURL}` : "images/avatar-19.png";
-                
-                const history = data.weightHistory || [];
-                history.sort((a, b) => new Date(a.date) - new Date(b.date));
-                const ctx = document.getElementById('coachViewChart').getContext('2d');
-                if (coachChart) coachChart.destroy();
-                coachChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: history.map(item => new Date(item.date).toLocaleDateString()),
-                        datasets: [{ label: 'Weight', data: history.map(i => i.weight), borderColor: '#FFD700', backgroundColor: 'rgba(255, 215, 0, 0.2)', fill: true }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#222' } }, y: { grid: { color: '#222' } } } }
-                });
-            }
+            const modal = document.getElementById('client-modal'); modal.style.display = 'flex'; const userRef = doc(db, "users", clientId); const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) { const data = docSnap.data(); document.getElementById('modal-client-name').innerText = data.name || "Unknown"; document.getElementById('modal-client-email').innerText = data.email; document.getElementById('modal-client-img').src = data.photoURL ? `images/${data.photoURL}` : "images/avatar-19.png";
+            const history = data.weightHistory || []; history.sort((a, b) => new Date(a.date) - new Date(b.date)); const ctx = document.getElementById('coachViewChart').getContext('2d'); if (coachChart) coachChart.destroy(); coachChart = new Chart(ctx, { type: 'line', data: { labels: history.map(item => new Date(item.date).toLocaleDateString()), datasets: [{ label: 'Weight', data: history.map(i => i.weight), borderColor: '#FFD700', backgroundColor: 'rgba(255, 215, 0, 0.2)', fill: true }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#222' } }, y: { grid: { color: '#222' } } } } }); }
         };
 
-        // 8. CHAT LOGIC 
-        let unsubscribeChat = null;
-        let currentChatPartnerId = null;
-        
-        async function loadChatUsers() {
-            const list = document.getElementById('chat-users-list');
-            list.innerHTML = "";
-            clientsList.forEach(client => {
-                const div = document.createElement('div');
-                div.className = 'chat-user-item'; // Add CSS class if needed in style
-                div.style.padding = "10px"; div.style.cursor="pointer"; div.style.borderBottom="1px solid #333";
-                div.innerHTML = `<strong>${client.name}</strong>`;
-                div.onclick = () => openChat(client.id, client.name);
-                list.appendChild(div);
-            });
-        }
-
-        function openChat(partnerId, name) {
-            currentChatPartnerId = partnerId;
-            document.getElementById('chat-partner-name').innerText = name;
-            document.getElementById('chat-form').style.display = "flex";
-            const myId = auth.currentUser.uid;
-            const conversationId = myId < partnerId ? `${myId}_${partnerId}` : `${partnerId}_${myId}`;
-            
-            if (unsubscribeChat) unsubscribeChat();
-            const q = query(collection(db, "chats", conversationId, "messages"), orderBy("timestamp", "asc"));
-            unsubscribeChat = onSnapshot(q, (snap) => {
-                const area = document.getElementById('chat-messages-area');
-                area.innerHTML = "";
-                snap.forEach(doc => {
-                    const msg = doc.data();
-                    const isMe = msg.senderId === myId;
-                    const div = document.createElement('div');
-                    div.className = `message-bubble ${isMe?'me':'them'}`;
-                    div.innerText = msg.text;
-                    area.appendChild(div);
-                });
-                area.scrollTop = area.scrollHeight;
-            });
-        }
-
-        document.getElementById('chat-form').addEventListener('submit', async(e) => {
-            e.preventDefault();
-            const inp = document.getElementById('chat-input');
-            const txt = inp.value.trim();
-            if(!txt || !currentChatPartnerId) return;
-            const myId = auth.currentUser.uid;
-            const cid = myId < currentChatPartnerId ? `${myId}_${currentChatPartnerId}` : `${currentChatPartnerId}_${myId}`;
-            inp.value = "";
-            await addDoc(collection(db, "chats", cid, "messages"), { text: txt, senderId: myId, timestamp: serverTimestamp() });
-        });
+        let unsubscribeChat = null; let currentChatPartnerId = null;
+        async function loadChatUsers() { const list = document.getElementById('chat-users-list'); list.innerHTML = ""; clientsList.forEach(client => { const div = document.createElement('div'); div.className = 'chat-user-item'; div.style.padding = "10px"; div.style.cursor="pointer"; div.style.borderBottom="1px solid #333"; div.innerHTML = `<strong>${client.name}</strong>`; div.onclick = () => openChat(client.id, client.name); list.appendChild(div); }); }
+        function openChat(partnerId, name) { currentChatPartnerId = partnerId; document.getElementById('chat-partner-name').innerText = name; document.getElementById('chat-form').style.display = "flex"; const myId = auth.currentUser.uid; const conversationId = myId < partnerId ? `${myId}_${partnerId}` : `${partnerId}_${myId}`; if (unsubscribeChat) unsubscribeChat(); const q = query(collection(db, "chats", conversationId, "messages"), orderBy("timestamp", "asc")); unsubscribeChat = onSnapshot(q, (snap) => { const area = document.getElementById('chat-messages-area'); area.innerHTML = ""; snap.forEach(doc => { const msg = doc.data(); const isMe = msg.senderId === myId; const div = document.createElement('div'); div.className = `message-bubble ${isMe?'me':'them'}`; div.innerText = msg.text; area.appendChild(div); }); area.scrollTop = area.scrollHeight; }); }
+        document.getElementById('chat-form').addEventListener('submit', async(e) => { e.preventDefault(); const inp = document.getElementById('chat-input'); const txt = inp.value.trim(); if(!txt || !currentChatPartnerId) return; const myId = auth.currentUser.uid; const cid = myId < currentChatPartnerId ? `${myId}_${currentChatPartnerId}` : `${currentChatPartnerId}_${myId}`; inp.value = ""; await addDoc(collection(db, "chats", cid, "messages"), { text: txt, senderId: myId, timestamp: serverTimestamp() }); });
 
     </script>
 </body>
